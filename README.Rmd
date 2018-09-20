@@ -274,4 +274,9 @@ The final data looks like this:
 str(pacs)
 ```
 
+Writing to Dropbox's `cleaned_data` folder:
+
+```{r}
+write.csv(pacs, "../../cleaned_data/pacs.csv")
+```
 

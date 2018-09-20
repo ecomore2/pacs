@@ -249,3 +249,9 @@ Classes 'tbl_df', 'tbl' and 'data.frame':   8183 obs. of  17 variables:
  $ ns1              : Factor w/ 5 levels "equivocal","negative",..: 2 2 5 2 5 2 2 2 2 2 ...
  $ serotype         : Factor w/ 7 levels "dengue_1","dengue_2",..: 7 7 7 7 1 7 2 7 7 7 ...
 ```
+
+Writing to Dropbox's `cleaned_data` folder:
+
+``` r
+> write.csv(pacs, "../../cleaned_data/pacs.csv")
+```
