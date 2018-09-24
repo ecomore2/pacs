@@ -54,14 +54,6 @@ We additionally need the `ecomore` package from [GitHub](https://github.com/ecom
 
 ``` r
 > if (! "ecomore" %in% installed_packages)  devtools::install_github("ecomore2/ecomore")
-Downloading GitHub repo ecomore2/ecomore@master
-from URL https://api.github.com/repos/ecomore2/ecomore/zipball/master
-Installing ecomore
-'/Library/Frameworks/R.framework/Resources/bin/R' --no-site-file  \
-  --no-environ --no-save --no-restore --quiet CMD INSTALL  \
-  '/private/var/folders/0z/99v2vkd57yd4h_wwxbzqm2lm0000gn/T/RtmpXQV3SC/devtools11c9e65feb71d/ecomore2-ecomore-ec656bf'  \
-  --library='/Library/Frameworks/R.framework/Versions/3.5/Resources/library'  \
-  --install-tests 
 ```
 
 Loading the packages for interactive use at the command line:
