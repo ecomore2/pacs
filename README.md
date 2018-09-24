@@ -39,6 +39,7 @@ Packages that we need from [CRAN](https://cran.r-project.org):
 +           "lubridate", # dealing with dates
 +           "magrittr",  # pipe operators
 +           "purrr",     # functional programming tools
++           "readxl",    # reading excel files
 +           "tidyr"      # tidying data
 +           )
 ```
@@ -162,7 +163,7 @@ Reading, cleaning, reshaping data
 Reading `pre-PACS.xlsx`:
 
 ``` r
-> prepacs <- readxl::read_excel("../../raw_data/IPL PACS/pre-PACS.xlsx") %>% 
+> prepacs <- read_excel("../../raw_data/IPL PACS/pre-PACS.xlsx") %>% 
 +   transmute(id                = `Material #`,
 +             age               =  age,
 +             dob               =  fix_date(birthdate),
@@ -191,7 +192,7 @@ Reading `pre-PACS.xlsx`:
 Reading `PACS.xlsx`:
 
 ``` r
-> postpacs <- readxl::read_excel("../../raw_data/IPL PACS/PACS.xlsx") %>% 
+> postpacs <- read_excel("../../raw_data/IPL PACS/PACS.xlsx") %>% 
 +   transmute(id                = `Material #`,
 +             age               =  Age,
 +             dob               = `Date of birth`,
@@ -268,7 +269,7 @@ Correcting the ages
 -------------------
 
 ``` r
-> prepacs <- readxl::read_excel("../../raw_data/IPL PACS/pre-PACS.xlsx")
+> prepacs <- read_excel("../../raw_data/IPL PACS/pre-PACS.xlsx")
 Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
 shim, : Expecting logical in CV1309 / R1309C100: got 'Positive'
 Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =

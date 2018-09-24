@@ -68,6 +68,7 @@ cran <- c("devtools",  # development tools
           "lubridate", # dealing with dates
           "magrittr",  # pipe operators
           "purrr",     # functional programming tools
+          "readxl",    # reading excel files
           "tidyr"      # tidying data
           )
 ```
@@ -205,7 +206,7 @@ fix_provinces_names <- function(x) {
 Reading `pre-PACS.xlsx`:
 
 ```{r, warning = FALSE}
-prepacs <- readxl::read_excel("../../raw_data/IPL PACS/pre-PACS.xlsx") %>% 
+prepacs <- read_excel("../../raw_data/IPL PACS/pre-PACS.xlsx") %>% 
   transmute(id                = `Material #`,
             age               =  age,
             dob               =  fix_date(birthdate),
@@ -234,7 +235,7 @@ prepacs <- readxl::read_excel("../../raw_data/IPL PACS/pre-PACS.xlsx") %>%
 Reading `PACS.xlsx`:
 
 ```{r, warning = FALSE}
-postpacs <- readxl::read_excel("../../raw_data/IPL PACS/PACS.xlsx") %>% 
+postpacs <- read_excel("../../raw_data/IPL PACS/PACS.xlsx") %>% 
   transmute(id                = `Material #`,
             age               =  Age,
             dob               = `Date of birth`,
@@ -293,6 +294,6 @@ saveRDS(pacs, "../../cleaned_data/pacs.rds")
 ## Correcting the ages
 
 ```{r}
-prepacs <- readxl::read_excel("../../raw_data/IPL PACS/pre-PACS.xlsx")
+prepacs <- read_excel("../../raw_data/IPL PACS/pre-PACS.xlsx")
 ```
 
