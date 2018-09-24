@@ -62,7 +62,8 @@ installed_packages <- rownames(installed.packages())
 Packages that we need from [CRAN](https://cran.r-project.org):
 
 ```{r}
-cran <- c("dplyr",     # data frames manipulation
+cran <- c("devtools",  # development tools
+          "dplyr",     # data frames manipulation
           "lubridate", # dealing with dates
           "magrittr",  # pipe operators
           "purrr",     # functional programming tools
@@ -77,10 +78,17 @@ to_install <- !cran %in% installed_packages
 if (any(to_install)) install.packages(cran[to_install])
 ```
 
+We additionally need the `ecomore` package from
+[GitHub](https://github.com/ecomore2/ecomore):
+
+```{r}
+if (! "ecomore" %in% installed_packages)  devtools::install_github("ecomore2/ecomore")
+```
+
 Loading the packages for interactive use at the command line:
 
 ```{r message = FALSE}
-invisible(lapply(cran, library, character.only = TRUE))
+invisible(lapply(c(setdiff(cran, "devtools"), "ecomore"), library, character.only = TRUE))
 ```
 
 ## Utilitary functions
@@ -278,5 +286,12 @@ Writing to Dropbox's `cleaned_data` folder:
 
 ```{r}
 write.csv(pacs, "../../cleaned_data/pacs.csv")
+saveRDS(pacs, "../../cleaned_data/pacs.rds")
+```
+
+## Correcting the ages
+
+```{r}
+prepacs <- readxl::read_excel("../../raw_data/IPL PACS/pre-PACS.xlsx")
 ```
 

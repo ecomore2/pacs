@@ -34,7 +34,8 @@ Packages currently installed on the system:
 Packages that we need from [CRAN](https://cran.r-project.org):
 
 ``` r
-> cran <- c("dplyr",     # data frames manipulation
+> cran <- c("devtools",  # development tools
++           "dplyr",     # data frames manipulation
 +           "lubridate", # dealing with dates
 +           "magrittr",  # pipe operators
 +           "purrr",     # functional programming tools
@@ -49,10 +50,24 @@ Installing these packages when not already installed:
 > if (any(to_install)) install.packages(cran[to_install])
 ```
 
+We additionally need the `ecomore` package from [GitHub](https://github.com/ecomore2/ecomore):
+
+``` r
+> if (! "ecomore" %in% installed_packages)  devtools::install_github("ecomore2/ecomore")
+Downloading GitHub repo ecomore2/ecomore@master
+from URL https://api.github.com/repos/ecomore2/ecomore/zipball/master
+Installing ecomore
+'/Library/Frameworks/R.framework/Resources/bin/R' --no-site-file  \
+  --no-environ --no-save --no-restore --quiet CMD INSTALL  \
+  '/private/var/folders/0z/99v2vkd57yd4h_wwxbzqm2lm0000gn/T/RtmpXQV3SC/devtools11c9e65feb71d/ecomore2-ecomore-ec656bf'  \
+  --library='/Library/Frameworks/R.framework/Versions/3.5/Resources/library'  \
+  --install-tests 
+```
+
 Loading the packages for interactive use at the command line:
 
 ``` r
-> invisible(lapply(cran, library, character.only = TRUE))
+> invisible(lapply(c(setdiff(cran, "devtools"), "ecomore"), library, character.only = TRUE))
 ```
 
 Utilitary functions
@@ -254,4 +269,58 @@ Writing to Dropbox's `cleaned_data` folder:
 
 ``` r
 > write.csv(pacs, "../../cleaned_data/pacs.csv")
+> saveRDS(pacs, "../../cleaned_data/pacs.rds")
+```
+
+Correcting the ages
+-------------------
+
+``` r
+> prepacs <- readxl::read_excel("../../raw_data/IPL PACS/pre-PACS.xlsx")
+Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
+shim, : Expecting logical in CV1309 / R1309C100: got 'Positive'
+Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
+shim, : Expecting date in AC2790 / R2790C29: got '31/09/2013'
+Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
+shim, : Expecting logical in CZ3001 / R3001C104: got a date
+Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
+shim, : Expecting logical in AI3442 / R3442C35: got a date
+Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
+shim, : Expecting logical in AI3443 / R3443C35: got a date
+Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
+shim, : Expecting logical in AI3473 / R3473C35: got a date
+Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
+shim, : Expecting logical in AI3530 / R3530C35: got a date
+Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
+shim, : Expecting logical in AI3548 / R3548C35: got a date
+Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
+shim, : Expecting logical in AI3556 / R3556C35: got a date
+Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
+shim, : Expecting logical in AI3562 / R3562C35: got a date
+Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
+shim, : Expecting logical in AI3618 / R3618C35: got a date
+Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
+shim, : Expecting logical in AI3619 / R3619C35: got a date
+Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
+shim, : Expecting logical in CZ3707 / R3707C104: got a date
+Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
+shim, : Expecting logical in CZ3708 / R3708C104: got a date
+Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
+shim, : Expecting logical in CZ3709 / R3709C104: got a date
+Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
+shim, : Expecting logical in CZ3710 / R3710C104: got a date
+Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
+shim, : Expecting logical in CZ3711 / R3711C104: got a date
+Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
+shim, : Expecting logical in CZ3712 / R3712C104: got a date
+Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
+shim, : Expecting logical in CZ3713 / R3713C104: got a date
+Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
+shim, : Expecting logical in CZ3714 / R3714C104: got a date
+Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
+shim, : Expecting logical in CZ3715 / R3715C104: got a date
+Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
+shim, : Expecting logical in CZ3716 / R3716C104: got a date
+Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
+shim, : Expecting logical in CZ3717 / R3717C104: got a date
 ```
