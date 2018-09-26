@@ -49,8 +49,13 @@ and which is the data that were entered before adopting PACS at IPL and
 and which is the data that were entered directly into PACS and retrieved from it.
 
 These two files will be loaded into the `prepacs` and `postpacs` data frames
-respectively and binded together in the `pacs` data frame. The cleaned and
-reshaped data are in the `cleaned_data` folder of the DropBox Ecomore2 folder.
+respectively and binded together in the `pacs` data frame. After merging with
+the GPS data (see [here](https://github.com/ecomore2/gps)), the cleaned and
+reshaped data are saved to disk on `pacs.csv` and `pacs.rds` files in the
+`cleaned_data` folder of the DropBox Ecomore2 folder.
+
+**NOTE:** the age, date of birth, sample date collection and some village
+names are corrected are patched.
 
 ## Packages
 
