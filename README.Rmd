@@ -474,17 +474,16 @@ pacs %>%
 
 ## Writing to disk
 
-The final data looks like this:
-
 ```{r}
-str(pacs)
+file <- "../../cleaned_data/pacs.rds"
+if (file.exists(file)) {
+  pacs_file <- readRDS(file)
+  if ("source" %in% names(pacs_file)) {
+    pacs %>% 
+      full_join(select(pacs_file, id, source, longitude, latitude), "id") %>% 
+      write2disk("cleaned_data", "pacs")
+  } else {
+    write2disk(pacs, "cleaned_data", "pacs")
+  }
+} else write2disk(pacs, "cleaned_data", "pacs")
 ```
-
-Writing CSV and RDS files to Dropbox's `cleaned_data` folder:
-
-```{r}
-write2disk("cleaned_data", "pacs")
-```
-
-
-
