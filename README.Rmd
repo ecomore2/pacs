@@ -32,7 +32,7 @@ knitr::opts_chunk$set(margin = TRUE, prompt = TRUE, comment = "",
                       collapse = TRUE, cache = TRUE, autodep = TRUE,
                       dev.args = list(pointsize = 11), fig.height = 3.5,
                       fig.width = 4.24725, fig.retina = 2, fig.align = "center",
-                      messages = FALSE)
+                      messages = FALSE, warning = FALSE)
 
 ```
 

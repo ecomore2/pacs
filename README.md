@@ -303,8 +303,6 @@ Putting the pre-PACS age patch into shape:
 +                                    as.numeric() %>% 
 +                                    `+`(ymd("1899-12-30")),
 +             sample_collection = as.Date(`date collected blood sample`))
-Warning in function_list[[i]](value): NAs introduits lors de la conversion
-automatique
 ```
 
 Binding pre-PACS and post-PACS and reformating a bit:
@@ -374,320 +372,6 @@ Reading the corrected village names:
 +                    str_to_title() %>% 
 +                    trimws() %>% 
 +                    gsub("  *", " ", .))
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L1822 / R1822C12: got 'Nouveau Village: REUNI
-avec Nongbouathong-Nua et thai'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L1823 / R1823C12: got 'Nouveau Village: REUNI
-avec Nongbouathong-Nua et thai'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L1824 / R1824C12: got 'Nouveau Village: REUNI
-avec Nongbouathong-Nua et thai'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L1825 / R1825C12: got 'Nouveau Village: REUNI
-avec Nongbouathong-Nua et thai'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L1826 / R1826C12: got 'Nouveau Village: REUNI
-avec Nongbouathong-Nua et thai'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L1827 / R1827C12: got 'Nouveau Village: REUNI
-avec Nongbouathong-Nua et thai'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L1828 / R1828C12: got 'Nouveau Village: REUNI
-avec Nongbouathong-Nua et thai'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L1829 / R1829C12: got 'Nouveau Village: REUNI
-avec Nongbouathong-Nua et thai'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L1830 / R1830C12: got 'Nouveau Village: REUNI
-avec Nongbouathong-Nua et thai'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L1831 / R1831C12: got 'Nouveau Village: REUNI
-avec Nongbouathong-Nua et thai'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L1832 / R1832C12: got 'Nouveau Village: REUNI
-avec Nongbouathong-Nua et thai'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L1833 / R1833C12: got 'Nouveau Village: REUNI
-avec Nongbouathong-Nua et thai'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L1834 / R1834C12: got 'Nouveau Village: REUNI
-avec Nongbouathong-Nua et thai'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L1835 / R1835C12: got 'Nouveau Village: REUNI
-avec Nongbouathong-Nua et thai'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L1836 / R1836C12: got 'Nouveau Village: REUNI
-avec Nongbouathong-Nua et thai'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L1837 / R1837C12: got 'Nouveau Village: REUNI
-avec Nongbouathong-Nua et thai'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L1838 / R1838C12: got 'Nouveau Village: REUNI
-avec Nongbouathong-Nua et thai'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L1844 / R1844C12: got 'REUNI avec Nongdouang,
-thong et nua'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L1845 / R1845C12: got 'REUNI avec Nongdouang,
-thong et nua'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L1846 / R1846C12: got 'REUNI avec Nongdouang,
-thong et nua'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L1847 / R1847C12: got 'REUNI avec Nongdouang,
-thong et nua'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L1848 / R1848C12: got 'REUNI avec Nongdouang,
-thong et nua'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L1849 / R1849C12: got 'REUNI avec Nongdouang,
-thong et nua'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L1850 / R1850C12: got 'REUNI avec Nongdouang,
-thong et nua'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L1851 / R1851C12: got 'REUNI avec Nongdouang,
-thong et nua'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L1852 / R1852C12: got 'REUNI avec Nongdouang,
-thong et nua'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L1853 / R1853C12: got 'REUNI avec Nongdouang,
-thong et nua'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L1854 / R1854C12: got 'REUNI avec Nongdouang,
-thong et nua'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L1855 / R1855C12: got 'REUNI avec Nongdouang,
-thong et nua'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L1856 / R1856C12: got 'REUNI avec Nongdouang,
-thong et nua'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L1857 / R1857C12: got 'REUNI avec Nongdouang,
-thong et nua'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L1858 / R1858C12: got 'REUNI avec Nongdouang,
-thong et nua'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting numeric in A1898 / R1898C1: got 'd'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L2021 / R2021C12: got 'Reunion Nongteng-Nua,
-Nongteng-Tai,'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L2022 / R2022C12: got 'Reunion Nongteng-Nua,
-Nongteng-Tai,'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L2023 / R2023C12: got 'Reunion Nongteng-Nua,
-Nongteng-Tai,'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L2024 / R2024C12: got 'Reunion Nongteng-Nua,
-Nongteng-Tai,'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L2025 / R2025C12: got 'Reunion Nongteng-Nua,
-Nongteng-Tai,'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L2026 / R2026C12: got 'Reunion Nongteng-Nua,
-Nongteng-Tai,'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L2027 / R2027C12: got 'Reunion Nongteng-Nua,
-Nongteng-Tai,'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L2028 / R2028C12: got 'Reunion Nongteng-Nua,
-Nongteng-Tai,'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L2029 / R2029C12: got 'Reunion Nongteng-Nua,
-Nongteng-Tai,'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3245 / R3245C12: got 'Reuni Somvan nuea et
-Tai'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3246 / R3246C12: got 'Reuni Somvan nuea et
-Tai'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3247 / R3247C12: got 'Reuni Somvan nuea et
-Tai'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3248 / R3248C12: got 'Reuni Somvan nuea et
-Tai'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3249 / R3249C12: got 'Reuni Somvan nuea et
-Tai'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3250 / R3250C12: got 'Reuni Somvan nuea et
-Tai'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3251 / R3251C12: got 'Reuni Somvan nuea et
-Tai'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3252 / R3252C12: got 'Reuni Somvan nuea et
-Tai'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3253 / R3253C12: got 'Reuni Somvan nuea et
-Tai'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3254 / R3254C12: got 'Reuni Somvan nuea et
-Tai'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3255 / R3255C12: got 'Reuni Somvan nuea et
-Tai'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3256 / R3256C12: got 'Reuni Somvan nuea et
-Tai'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3257 / R3257C12: got 'Reuni Somvan nuea et
-Tai'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3258 / R3258C12: got 'Reuni Somvan nuea et
-Tai'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3259 / R3259C12: got 'Reuni Somvan nuea et
-Tai'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3260 / R3260C12: got 'Reuni Somvan nuea et
-Tai'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3261 / R3261C12: got 'Reuni Somvan nuea et
-Tai'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3262 / R3262C12: got 'Reuni Somvan nuea et
-Tai'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3263 / R3263C12: got 'Reuni Somvan nuea et
-Tai'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3264 / R3264C12: got 'Reuni Somvan nuea et
-Tai'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3383 / R3383C12: got 'Reunion Thatlouang Nua,
-thai et kang'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3384 / R3384C12: got 'Reunion Thatlouang Nua,
-thai et kang'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3385 / R3385C12: got 'Reunion Thatlouang Nua,
-thai et kang'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3386 / R3386C12: got 'Reunion Thatlouang Nua,
-thai et kang'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3387 / R3387C12: got 'Reunion Thatlouang Nua,
-thai et kang'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3388 / R3388C12: got 'Reunion Thatlouang Nua,
-thai et kang'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3389 / R3389C12: got 'Reunion Thatlouang Nua,
-thai et kang'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3390 / R3390C12: got 'Reunion Thatlouang Nua,
-thai et kang'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3391 / R3391C12: got 'Reunion Thatlouang Nua,
-thai et kang'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3392 / R3392C12: got 'Reunion Thatlouang Nua,
-thai et kang'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3393 / R3393C12: got 'Reunion Thatlouang Nua,
-thai et kang'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3394 / R3394C12: got 'Reunion Thatlouang Nua,
-thai et kang'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3395 / R3395C12: got 'Reunion Thatlouang Nua,
-thai et kang'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3396 / R3396C12: got 'Reunion Thatlouang Nua,
-thai et kang'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3397 / R3397C12: got 'Reunion Thatlouang Nua,
-thai et kang'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3398 / R3398C12: got 'Reunion Thatlouang Nua,
-thai et kang'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3399 / R3399C12: got 'Reunion Thatlouang Nua,
-thai et kang'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3400 / R3400C12: got 'Reunion Thatlouang Nua,
-thai et kang'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3401 / R3401C12: got 'Reunion Thatlouang Nua,
-thai et kang'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3402 / R3402C12: got 'Reunion Thatlouang Nua,
-thai et kang'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3403 / R3403C12: got 'Reunion Thatlouang Nua,
-thai et kang'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3404 / R3404C12: got 'Reunion Thatlouang Nua,
-thai et kang'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3405 / R3405C12: got 'Reunion Thatlouang Nua,
-thai et kang'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3406 / R3406C12: got 'Reunion Thatlouang Nua,
-thai et kang'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3407 / R3407C12: got 'Reunion Thatlouang Nua,
-thai et kang'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3408 / R3408C12: got 'Reunion Thatlouang Nua,
-thai et kang'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3409 / R3409C12: got 'Reunion Thatlouang Nua,
-thai et kang'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3410 / R3410C12: got 'Reunion Thatlouang Nua,
-thai et kang'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3411 / R3411C12: got 'Reunion Thatlouang Nua,
-thai et kang'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3412 / R3412C12: got 'Reunion Thatlouang Nua,
-thai et kang'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3413 / R3413C12: got 'Reunion Thatlouang Nua,
-thai et kang'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3414 / R3414C12: got 'Reunion Thatlouang Nua,
-thai et kang'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3415 / R3415C12: got 'Reunion Thatlouang Nua,
-thai et kang'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3416 / R3416C12: got 'Reunion Thatlouang Nua,
-thai et kang'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3417 / R3417C12: got 'Reunion Thatlouang Nua,
-thai et kang'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3418 / R3418C12: got 'Reunion Thatlouang Nua,
-thai et kang'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3419 / R3419C12: got 'Reunion Thatlouang Nua,
-thai et kang'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3420 / R3420C12: got 'Reunion Thatlouang Nua,
-thai et kang'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3421 / R3421C12: got 'Reunion Thatlouang Nua,
-thai et kang'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3422 / R3422C12: got 'Reunion Thatlouang Nua,
-thai et kang'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3423 / R3423C12: got 'Reunion Thatlouang Nua,
-thai et kang'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3424 / R3424C12: got 'Reunion Thatlouang Nua,
-thai et kang'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in L3425 / R3425C12: got 'Reunion Thatlouang Nua,
-thai et kang'
 ```
 
 Testing the village patch:
@@ -769,22 +453,23 @@ Date of birth should be before all the other dates:
 > pacs %>%
 +   filter(!(dob < onset & dob < hospitalization & dob < consultation & dob < sample_collection)) %>% 
 +   select(id, age, dob, onset, hospitalization, consultation, sample_collection)
-# A tibble: 13 x 7
-      id age   dob        onset      hospitalization consultation
-   <int> <chr> <date>     <date>     <date>          <date>      
- 1    86 5     2012-11-06 2012-07-08 2012-07-13      2012-07-13  
- 2   120 29    2012-08-05 2012-07-27 NA              2012-07-30  
- 3   181 8     2012-12-08 2012-08-12 2012-08-15      2012-08-15  
+# A tibble: 14 x 7
+      id   age dob        onset      hospitalization consultation
+   <int> <dbl> <date>     <date>     <date>          <date>      
+ 1    86  5    2012-11-06 2012-07-08 2012-07-13      2012-07-13  
+ 2   125  8    2012-08-01 2012-07-29 2012-07-31      2012-07-31  
+ 3   181  8    2012-12-08 2012-08-12 2012-08-15      2012-08-15  
  4   266 10    2012-11-08 2012-09-13 NA              2012-09-17  
- 5   769 0     2013-11-01 2013-05-10 2013-05-12      2013-05-12  
- 6   844 6     2207-10-10 2013-05-20 2013-05-23      2013-05-23  
+ 5   769  0    2013-11-01 2013-05-10 2013-05-12      2013-05-12  
+ 6   844  6    2207-10-10 2013-05-20 2013-05-23      2013-05-23  
  7  2841 32    2013-12-04 2013-12-02 2015-12-04      2015-12-04  
  8  3876 24    2016-06-05 2016-05-06 2016-07-06      NA          
- 9  3970 1.8   2016-08-04 2016-07-04 2016-07-08      2016-07-08  
-10  5051 58    2016-12-01 2016-11-25 2016-12-01      2016-12-01  
-11  5246 4     2017-06-13 2017-02-09 2017-02-13      2017-02-13  
-12  6441 5     2017-12-30 2017-08-11 2017-08-14      2017-08-16  
-13  6980 11    2017-10-08 2017-10-06 2017-10-08      2017-10-08  
+ 9  3757  4    2016-04-23 NA         NA              2016-04-18  
+10  3970  1.67 2016-08-04 2016-07-04 2016-07-08      2016-07-08  
+11  5051 58    2016-12-01 2016-11-25 2016-12-01      2016-12-01  
+12  5246  4    2017-06-13 2017-02-09 2017-02-13      2017-02-13  
+13  6441  5    2017-12-30 2017-08-11 2017-08-14      2017-08-16  
+14  6980 11    2017-10-08 2017-10-06 2017-10-08      2017-10-08  
 # ... with 1 more variable: sample_collection <date>
 ```
 
@@ -794,20 +479,20 @@ Onset should be before hospitalization, consultation and date of collection:
 > pacs %>%
 +   filter(!(onset <= hospitalization & onset <= consultation & onset <= sample_collection)) %>% 
 +   select(id, age, dob, onset, hospitalization, consultation, sample_collection)
-# A tibble: 77 x 7
-      id age   dob        onset      hospitalization consultation
-   <int> <chr> <date>     <date>     <date>          <date>      
- 1    59 12    2000-06-20 2012-06-27 2012-06-29      2012-06-29  
- 2    63 12    NA         2012-07-01 2012-07-04      2012-07-04  
- 3   382 20    NA         2012-10-23 NA              2012-10-25  
- 4   442 27    NA         2012-11-29 NA              2012-11-23  
- 5   523 14    NA         2012-12-27 2012-01-02      2013-01-03  
- 6   525 14    NA         2012-12-31 2012-01-02      2013-01-03  
- 7  1348 3     NA         2103-06-21 2013-06-26      2013-06-26  
- 8  1491 11    2001-09-19 2013-07-06 2013-07-05      2013-07-06  
- 9  1569 37    NA         2103-07-05 2013-07-08      2013-07-08  
-10  1725 39    1974-06-15 2103-07-13 2013-07-16      2013-07-16  
-# ... with 67 more rows, and 1 more variable: sample_collection <date>
+# A tibble: 87 x 7
+      id   age dob        onset      hospitalization consultation
+   <int> <dbl> <date>     <date>     <date>          <date>      
+ 1     4    45 NA         2012-09-04 NA              2012-10-04  
+ 2   442    27 NA         2012-11-29 NA              2012-11-23  
+ 3   523    14 NA         2012-12-27 2012-01-02      2013-01-03  
+ 4   525    14 NA         2012-12-31 2012-01-02      2013-01-03  
+ 5   687    35 NA         2013-05-03 NA              2013-06-04  
+ 6   689    12 NA         2013-05-04 2013-10-04      2013-10-04  
+ 7   698    21 NA         2013-05-04 2013-10-04      2013-10-04  
+ 8   813    11 NA         2013-06-16 NA              2013-06-19  
+ 9  1348     3 NA         2103-06-21 2013-06-26      2013-06-26  
+10  1491    11 2001-09-19 2013-07-06 2013-07-05      2013-07-06  
+# ... with 77 more rows, and 1 more variable: sample_collection <date>
 ```
 
 Writing to disk
@@ -821,8 +506,8 @@ Classes 'tbl_df', 'tbl' and 'data.frame':   7459 obs. of  17 variables:
  $ id               : int  1 2 3 4 5 6 7 8 9 10 ...
  $ nationality      : chr  "laos" "laos" "africa" "foreigner" ...
  $ sex              : Factor w/ 2 levels "female","male": 1 2 1 2 2 1 2 2 2 2 ...
- $ age              : chr  "10" "6" "25" "0" ...
- $ dob              : Date, format: "2012-02-10" NA ...
+ $ age              : num  10 6 25 45 55 4 64 13 5 14 ...
+ $ dob              : Date, format: "2002-02-10" NA ...
  $ province         : chr  "Vientiane Capital" "Vientiane Capital" NA "Vientiane Capital" ...
  $ district         : chr  "Sisattanak district" "Hardsaiyfong district" NA "Xaysettha district" ...
  $ village          : chr  "thongkang" "nongheo" "aaa" "phonesinuan" ...
