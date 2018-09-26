@@ -157,6 +157,40 @@ The following function cleans a vector of provinces names:
 + }
 ```
 
+The following function removes any year information from the samples IDs:
+
+``` r
+> fix_id <- function(x) {
++   as.integer(sub("^\\d*-", "", x))
++ }
+```
+
+The following function converts a character vector of age information that may contains entries such as "5 years and 9 months", "1 year and 11 months", "1 year and 1 month", "2 months", "23 days" into an integer vector that contains age in decimal fractions of years:
+
+``` r
+> convert2years <- function(x) {
++   require(magrittr) # %>%, %<>% 
++   ym <- which(grepl("and", x))
++   m  <- which(grepl("^\\d* months*", x))
++   d  <- which(grepl("day", x))
++   x[ym] %<>%
++     sub(" *y*e*a*r*s* and ", "-", .) %>% 
++     sub(" months*", "", .) %>%
++     strsplit("-") %>%
++     lapply(as.numeric) %>%
++     sapply(function(x) x[1] + x[2] / 12)
++   x[m] %<>%
++     sub(" months*", "", .) %>%
++     as.numeric() %>%
++     `/`(12)
++   x[d] %<>%
++     sub(" days*", "", .) %>%
++     as.numeric() %>%
++     `/`(365)
++   as.numeric(x)
++ }
+```
+
 Reading, cleaning, reshaping data
 ---------------------------------
 
@@ -164,7 +198,7 @@ Reading `pre-PACS.xlsx`:
 
 ``` r
 > prepacs <- read_excel("../../raw_data/IPL PACS/pre-PACS.xlsx") %>% 
-+   transmute(id                = `Material #`,
++   transmute(id                = fix_id(`Material #`),
 +             age               =  age,
 +             dob               =  fix_date(birthdate),
 +             sex               =  sex,
@@ -209,28 +243,30 @@ Reading `PACS.xlsx`:
 +   separate(home_location, c("country", "province", "district", "village"), "\\.") %>% 
 +   select(-country) %>% 
 +   filter(keep_observation(id)) %>% 
-+   mutate(id = sub("R", "", id)) %>% 
++   mutate(id = fix_id(sub("R", "", id))) %>% 
 +   mutate_if(is.POSIXct, as.Date)
 ```
 
 Here, compared to `prepacs`, we don't have serotype and nationality. Let's put `prepacs` and `pacs` together:
 
 ``` r
-> pacs <- bind_rows(prepacs, postpacs) %>% 
-+   mutate(nationality = fix_country_names(nationality),
+> pacs <- prepacs %>% 
++   bind_rows(filter(postpacs, ! id %in% prepacs$id)) %>% 
++   mutate(id          = id,
++          nationality = fix_country_names(nationality),
 +          sex         = as.factor(ifelse(sex == "Unknown", NA, tolower(sex))),
 +          province    = fix_provinces_names(province),
 +          pcr         = as.factor(gsub(" ", "_", tolower(pcr))),
 +          ns1         = ns1 %>%
 +                          tolower() %>%
 +                          gsub(" ", "_", .) %>%
-+                          gsub("n/a", NA, .) %>%
++                          sub("n/a", NA, .) %>%
 +                          as.factor(),
 +          serotype    = serotype %>%
 +                          tolower() %>%
 +                          gsub(" ", "_", .) %>%
-+                          sub("not_finish", "not_finished", .) %>%
-+                          gsub("not_identify", "not_identified", .) %>% 
++                          sub("not_finish"  , "not_finished"  , .) %>%
++                          sub("not_identify", "not_identified", .) %>% 
 +                          as.factor())
 ```
 
@@ -238,8 +274,8 @@ The final data looks like this:
 
 ``` r
 > str(pacs)
-Classes 'tbl_df', 'tbl' and 'data.frame':   8183 obs. of  17 variables:
- $ id               : chr  "2012-1" "2012-2" "2012-3" "2012-4" ...
+Classes 'tbl_df', 'tbl' and 'data.frame':   7459 obs. of  17 variables:
+ $ id               : int  1 2 3 4 5 6 7 8 9 10 ...
  $ nationality      : chr  "laos" "laos" "africa" "foreigner" ...
  $ sex              : Factor w/ 2 levels "female","male": 1 2 1 2 2 1 2 2 2 2 ...
  $ age              : chr  "10" "6" "25" "0" ...
@@ -265,55 +301,79 @@ Writing to Dropbox's `cleaned_data` folder:
 > saveRDS(pacs, "../../cleaned_data/pacs.rds")
 ```
 
-Correcting the ages
--------------------
+Paching the ages
+----------------
 
 ``` r
-> prepacs <- read_excel("../../raw_data/IPL PACS/pre-PACS.xlsx")
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in CV1309 / R1309C100: got 'Positive'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting date in AC2790 / R2790C29: got '31/09/2013'
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in CZ3001 / R3001C104: got a date
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in AI3442 / R3442C35: got a date
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in AI3443 / R3443C35: got a date
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in AI3473 / R3473C35: got a date
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in AI3530 / R3530C35: got a date
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in AI3548 / R3548C35: got a date
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in AI3556 / R3556C35: got a date
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in AI3562 / R3562C35: got a date
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in AI3618 / R3618C35: got a date
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in AI3619 / R3619C35: got a date
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in CZ3707 / R3707C104: got a date
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in CZ3708 / R3708C104: got a date
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in CZ3709 / R3709C104: got a date
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in CZ3710 / R3710C104: got a date
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in CZ3711 / R3711C104: got a date
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in CZ3712 / R3712C104: got a date
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in CZ3713 / R3713C104: got a date
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in CZ3714 / R3714C104: got a date
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in CZ3715 / R3715C104: got a date
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in CZ3716 / R3716C104: got a date
-Warning in read_fun(path = path, sheet_i = sheet, limits = limits, shim =
-shim, : Expecting logical in CZ3717 / R3717C104: got a date
+> agefile <- "../../raw_data/IPL PACS/ages_2018-09-25.xlsx"
+```
+
+``` r
+> agepacs <- read_excel(agefile, "pacs") %>% 
++   rename(id                = `Material #`,
++          age               =  Age,
++          dob               = `Date of birth`,
++          sample_collection = `Sample collection date`) %>% 
++   mutate_if(is.POSIXct, as.Date)
+```
+
+``` r
+> ageprepacs <- read_excel(agefile, "pre pacs") %>% 
++   transmute(id                = `Material #`,
++             age               =  age,
++             dob               =  birthdate %>% 
++                                    as.numeric() %>% 
++                                    `+`(ymd("1899-12-30")),
++             sample_collection = as.Date(`date collected blood sample`))
+Warning in function_list[[i]](value): NAs introduits lors de la conversion
+automatique
+```
+
+``` r
+> age_patch <- bind_rows(ageprepacs, agepacs) %>% 
++   transmute(id                 = fix_id(id),
++             age2               = age,
++             dob2               = dob,
++             sample_collection2 = sample_collection)
+```
+
+``` r
+> pacs %<>%
++   left_join(age_patch, "id") %>%
++   mutate(age               = convert2years(if_else(is.na(age2), age, age2)),
++          dob               = if_else(is.na(dob2), dob, dob2),
++          sample_collection = if_else(is.na(sample_collection2),
++                                      sample_collection, sample_collection2)) %>% 
++   select(-age2, -dob2, -sample_collection2)
+```
+
+Testing the ages
+----------------
+
+``` r
+> pacs %>%
++   mutate(date2 = if_else(is.na(onset),
++                          if_else(is.na(hospitalization),
++                                  if_else(is.na(consultation),
++                                          sample_collection,
++                                          consultation),
++                                  hospitalization),
++                          onset),
++          age2 = as.numeric((date2 - dob) / 365)) %>% 
++   filter(age2 > age + 1 | age2 < age - 1) %>% 
++   select(id, age, age2, dob, onset, hospitalization, consultation, sample_collection)
+# A tibble: 157 x 8
+      id   age     age2 dob        onset      hospitalization consultation
+   <int> <dbl>    <dbl> <date>     <date>     <date>          <date>      
+ 1    25    10  2.01e+1 1992-05-03 2012-05-20 2012-05-23      2012-05-24  
+ 2    55    53  5.07e+1 1961-11-07 2012-06-25 2012-06-26      2012-06-26  
+ 3    80    22  2.32e+1 1989-05-02 2012-07-14 NA              2012-07-16  
+ 4    82    27  3.04e+1 1982-02-06 2012-07-08 2012-07-13      2012-07-13  
+ 5    86     5 -3.32e-1 2012-11-06 2012-07-08 2012-07-13      2012-07-13  
+ 6    94    54  5.16e+1 1960-12-14 2012-07-16 NA              2012-07-18  
+ 7   125     8 -8.22e-3 2012-08-01 2012-07-29 2012-07-31      2012-07-31  
+ 8   144    18  2.02e+1 1992-06-07 2012-08-04 NA              2012-08-08  
+ 9   152    37  3.58e+1 1976-11-13 2012-08-10 NA              2012-08-12  
+10   158    36  3.75e+1 1975-02-14 2012-08-06 NA              2012-08-09  
+# ... with 147 more rows, and 1 more variable: sample_collection <date>
 ```

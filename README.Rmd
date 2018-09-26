@@ -201,13 +201,50 @@ fix_provinces_names <- function(x) {
 }
 ```
 
+The following function removes any year information from the samples IDs:
+
+```{r}
+fix_id <- function(x) {
+  as.integer(sub("^\\d*-", "", x))
+}
+```
+
+The following function converts a character vector of age information that may
+contains entries such as "5 years and 9 months", "1 year and 11 months", "1 year
+and 1 month", "2 months", "23 days" into an integer vector that contains age in
+decimal fractions of years:
+
+```{r}
+convert2years <- function(x) {
+  require(magrittr) # %>%, %<>% 
+  ym <- which(grepl("and", x))
+  m  <- which(grepl("^\\d* months*", x))
+  d  <- which(grepl("day", x))
+  x[ym] %<>%
+    sub(" *y*e*a*r*s* and ", "-", .) %>% 
+    sub(" months*", "", .) %>%
+    strsplit("-") %>%
+    lapply(as.numeric) %>%
+    sapply(function(x) x[1] + x[2] / 12)
+  x[m] %<>%
+    sub(" months*", "", .) %>%
+    as.numeric() %>%
+    `/`(12)
+  x[d] %<>%
+    sub(" days*", "", .) %>%
+    as.numeric() %>%
+    `/`(365)
+  as.numeric(x)
+}
+```
+
 ## Reading, cleaning, reshaping data
 
 Reading `pre-PACS.xlsx`:
 
 ```{r, warning = FALSE}
 prepacs <- read_excel("../../raw_data/IPL PACS/pre-PACS.xlsx") %>% 
-  transmute(id                = `Material #`,
+  transmute(id                = fix_id(`Material #`),
             age               =  age,
             dob               =  fix_date(birthdate),
             sex               =  sex,
@@ -252,7 +289,7 @@ postpacs <- read_excel("../../raw_data/IPL PACS/PACS.xlsx") %>%
   separate(home_location, c("country", "province", "district", "village"), "\\.") %>% 
   select(-country) %>% 
   filter(keep_observation(id)) %>% 
-  mutate(id = sub("R", "", id)) %>% 
+  mutate(id = fix_id(sub("R", "", id))) %>% 
   mutate_if(is.POSIXct, as.Date)
 ```
 
@@ -260,21 +297,23 @@ Here, compared to `prepacs`, we don't have serotype and nationality. Let's put
 `prepacs` and `pacs` together:
 
 ```{r}
-pacs <- bind_rows(prepacs, postpacs) %>% 
-  mutate(nationality = fix_country_names(nationality),
+pacs <- prepacs %>% 
+  bind_rows(filter(postpacs, ! id %in% prepacs$id)) %>% 
+  mutate(id          = id,
+         nationality = fix_country_names(nationality),
          sex         = as.factor(ifelse(sex == "Unknown", NA, tolower(sex))),
          province    = fix_provinces_names(province),
          pcr         = as.factor(gsub(" ", "_", tolower(pcr))),
          ns1         = ns1 %>%
                          tolower() %>%
                          gsub(" ", "_", .) %>%
-                         gsub("n/a", NA, .) %>%
+                         sub("n/a", NA, .) %>%
                          as.factor(),
          serotype    = serotype %>%
                          tolower() %>%
                          gsub(" ", "_", .) %>%
-                         sub("not_finish", "not_finished", .) %>%
-                         gsub("not_identify", "not_identified", .) %>% 
+                         sub("not_finish"  , "not_finished"  , .) %>%
+                         sub("not_identify", "not_identified", .) %>% 
                          as.factor())
 ```
 
@@ -291,9 +330,63 @@ write.csv(pacs, "../../cleaned_data/pacs.csv")
 saveRDS(pacs, "../../cleaned_data/pacs.rds")
 ```
 
-## Correcting the ages
+## Paching the ages
 
 ```{r}
-prepacs <- read_excel("../../raw_data/IPL PACS/pre-PACS.xlsx")
+agefile <- "../../raw_data/IPL PACS/ages_2018-09-25.xlsx"
 ```
+
+```{r}
+agepacs <- read_excel(agefile, "pacs") %>% 
+  rename(id                = `Material #`,
+         age               =  Age,
+         dob               = `Date of birth`,
+         sample_collection = `Sample collection date`) %>% 
+  mutate_if(is.POSIXct, as.Date)
+```
+
+```{r}
+ageprepacs <- read_excel(agefile, "pre pacs") %>% 
+  transmute(id                = `Material #`,
+            age               =  age,
+            dob               =  birthdate %>% 
+                                   as.numeric() %>% 
+                                   `+`(ymd("1899-12-30")),
+            sample_collection = as.Date(`date collected blood sample`))
+```
+
+```{r}
+age_patch <- bind_rows(ageprepacs, agepacs) %>% 
+  transmute(id                 = fix_id(id),
+            age2               = age,
+            dob2               = dob,
+            sample_collection2 = sample_collection)
+```
+
+```{r}
+pacs %<>%
+  left_join(age_patch, "id") %>%
+  mutate(age               = convert2years(if_else(is.na(age2), age, age2)),
+         dob               = if_else(is.na(dob2), dob, dob2),
+         sample_collection = if_else(is.na(sample_collection2),
+                                     sample_collection, sample_collection2)) %>% 
+  select(-age2, -dob2, -sample_collection2)
+```
+
+## Testing the ages
+
+```{r}
+pacs %>%
+  mutate(date2 = if_else(is.na(onset),
+                         if_else(is.na(hospitalization),
+                                 if_else(is.na(consultation),
+                                         sample_collection,
+                                         consultation),
+                                 hospitalization),
+                         onset),
+         age2 = as.numeric((date2 - dob) / 365)) %>% 
+  filter(age2 > age + 1 | age2 < age - 1) %>% 
+  select(id, age, age2, dob, onset, hospitalization, consultation, sample_collection)
+```
+
 
