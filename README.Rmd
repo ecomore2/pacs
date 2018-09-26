@@ -454,6 +454,24 @@ pacs %>%
   select(-Bhan)
 ```
 
+## Testing the dates
+
+Date of birth should be before all the other dates:
+
+```{r}
+pacs %>%
+  filter(!(dob < onset & dob < hospitalization & dob < consultation & dob < sample_collection)) %>% 
+  select(id, age, dob, onset, hospitalization, consultation, sample_collection)
+```
+
+Onset should be before hospitalization, consultation and date of collection:
+
+```{r}
+pacs %>%
+  filter(!(onset <= hospitalization & onset <= consultation & onset <= sample_collection)) %>% 
+  select(id, age, dob, onset, hospitalization, consultation, sample_collection)
+```
+
 ## Writing to disk
 
 The final data looks like this:

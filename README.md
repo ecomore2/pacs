@@ -760,6 +760,56 @@ Patching the village names:
 #   serotype <fct>
 ```
 
+Testing the dates
+-----------------
+
+Date of birth should be before all the other dates:
+
+``` r
+> pacs %>%
++   filter(!(dob < onset & dob < hospitalization & dob < consultation & dob < sample_collection)) %>% 
++   select(id, age, dob, onset, hospitalization, consultation, sample_collection)
+# A tibble: 13 x 7
+      id age   dob        onset      hospitalization consultation
+   <int> <chr> <date>     <date>     <date>          <date>      
+ 1    86 5     2012-11-06 2012-07-08 2012-07-13      2012-07-13  
+ 2   120 29    2012-08-05 2012-07-27 NA              2012-07-30  
+ 3   181 8     2012-12-08 2012-08-12 2012-08-15      2012-08-15  
+ 4   266 10    2012-11-08 2012-09-13 NA              2012-09-17  
+ 5   769 0     2013-11-01 2013-05-10 2013-05-12      2013-05-12  
+ 6   844 6     2207-10-10 2013-05-20 2013-05-23      2013-05-23  
+ 7  2841 32    2013-12-04 2013-12-02 2015-12-04      2015-12-04  
+ 8  3876 24    2016-06-05 2016-05-06 2016-07-06      NA          
+ 9  3970 1.8   2016-08-04 2016-07-04 2016-07-08      2016-07-08  
+10  5051 58    2016-12-01 2016-11-25 2016-12-01      2016-12-01  
+11  5246 4     2017-06-13 2017-02-09 2017-02-13      2017-02-13  
+12  6441 5     2017-12-30 2017-08-11 2017-08-14      2017-08-16  
+13  6980 11    2017-10-08 2017-10-06 2017-10-08      2017-10-08  
+# ... with 1 more variable: sample_collection <date>
+```
+
+Onset should be before hospitalization, consultation and date of collection:
+
+``` r
+> pacs %>%
++   filter(!(onset <= hospitalization & onset <= consultation & onset <= sample_collection)) %>% 
++   select(id, age, dob, onset, hospitalization, consultation, sample_collection)
+# A tibble: 77 x 7
+      id age   dob        onset      hospitalization consultation
+   <int> <chr> <date>     <date>     <date>          <date>      
+ 1    59 12    2000-06-20 2012-06-27 2012-06-29      2012-06-29  
+ 2    63 12    NA         2012-07-01 2012-07-04      2012-07-04  
+ 3   382 20    NA         2012-10-23 NA              2012-10-25  
+ 4   442 27    NA         2012-11-29 NA              2012-11-23  
+ 5   523 14    NA         2012-12-27 2012-01-02      2013-01-03  
+ 6   525 14    NA         2012-12-31 2012-01-02      2013-01-03  
+ 7  1348 3     NA         2103-06-21 2013-06-26      2013-06-26  
+ 8  1491 11    2001-09-19 2013-07-06 2013-07-05      2013-07-06  
+ 9  1569 37    NA         2103-07-05 2013-07-08      2013-07-08  
+10  1725 39    1974-06-15 2103-07-13 2013-07-16      2013-07-16  
+# ... with 67 more rows, and 1 more variable: sample_collection <date>
+```
+
 Writing to disk
 ---------------
 
@@ -771,8 +821,8 @@ Classes 'tbl_df', 'tbl' and 'data.frame':   7459 obs. of  17 variables:
  $ id               : int  1 2 3 4 5 6 7 8 9 10 ...
  $ nationality      : chr  "laos" "laos" "africa" "foreigner" ...
  $ sex              : Factor w/ 2 levels "female","male": 1 2 1 2 2 1 2 2 2 2 ...
- $ age              : num  10 6 25 45 55 4 64 13 5 14 ...
- $ dob              : Date, format: "2002-02-10" NA ...
+ $ age              : chr  "10" "6" "25" "0" ...
+ $ dob              : Date, format: "2012-02-10" NA ...
  $ province         : chr  "Vientiane Capital" "Vientiane Capital" NA "Vientiane Capital" ...
  $ district         : chr  "Sisattanak district" "Hardsaiyfong district" NA "Xaysettha district" ...
  $ village          : chr  "thongkang" "nongheo" "aaa" "phonesinuan" ...
