@@ -69,6 +69,7 @@ cran <- c("devtools",  # development tools
           "magrittr",  # pipe operators
           "purrr",     # functional programming tools
           "readxl",    # reading excel files
+          "stringr",   # string operations
           "tidyr"      # tidying data
           )
 ```
@@ -387,6 +388,46 @@ pacs %>%
          age2 = as.numeric((date2 - dob) / 365)) %>% 
   filter(age2 > age + 1 | age2 < age - 1) %>% 
   select(id, age, age2, dob, onset, hospitalization, consultation, sample_collection)
+```
+
+## Patching villages names
+
+Reading the corrected village names:
+
+```{r}
+villages_patch <- read_excel("../../raw_data/IPL PACS/Villages a retrouver.xlsx", "Ecomore 2") %>%
+  transmute(id   = id,
+            Bhan = Bhan %>%
+                   str_to_title() %>% 
+                   trimws() %>% 
+                   gsub("  *", " ", .))
+```
+
+Testing the village patch:
+
+```{r}
+tmp <- villages_patch %>%
+  mutate(has_village = ! is.na(Bhan)) %>% 
+  left_join(select(mutate(pacs, positive = pcr == "positive" | ns1 == "positive"), id, positive), "id")
+```
+
+```{r}
+with(tmp, table(has_village, positive))
+```
+
+```{r}
+tmp %>% filter((! has_village) & positive) %>% select(id) %>% unlist() %>% unname() %>% sort() %>% cat()
+```
+
+```{r}
+tmp %>% filter(has_village & (! positive)) %>% select(id) %>% unlist() %>% unname() %>% sort() %>% cat()
+```
+
+```{r}
+pacs %>%
+  left_join(villages_patch, "id") %>% 
+  mutate(village = if_else(is.na(Bhan), village, Bhan)) %>% 
+  select(-Bhan)
 ```
 
 
