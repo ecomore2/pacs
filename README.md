@@ -425,7 +425,7 @@ Patching the village names:
 +   left_join(villages_patch, "id") %>% 
 +   mutate(village = if_else(is.na(Bhan), village, Bhan)) %>% 
 +   select(-Bhan)
-# A tibble: 7,459 x 17
+# A tibble: 7,460 x 17
       id nationality sex      age dob        province   district   village
    <dbl> <chr>       <fct>  <dbl> <date>     <chr>      <chr>      <chr>  
  1     1 laos        female    10 2002-02-10 Vientiane… Sisattana… Thong-…
@@ -438,7 +438,7 @@ Patching the village names:
  8     8 laos        male      13 1998-06-17 Vientiane… Chanthabu… Phonsa…
  9     9 laos        male       5 2006-12-12 Vientiane… Xaysettha… Phonxai
 10    10 laos        male      14 NA         Vientiane… Xaysettha… Chomma…
-# ... with 7,449 more rows, and 9 more variables: travel_laos <chr>,
+# ... with 7,450 more rows, and 9 more variables: travel_laos <chr>,
 #   travel_abroad <chr>, onset <date>, hospitalization <date>,
 #   consultation <date>, sample_collection <date>, pcr <fct>, ns1 <fct>,
 #   serotype <fct>
