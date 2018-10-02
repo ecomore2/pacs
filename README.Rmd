@@ -299,6 +299,35 @@ postpacs <- read_excel("../../raw_data/IPL PACS/PACS.xlsx") %>%
   mutate_if(is.POSIXct, as.Date)
 ```
 
+Update of 2018-10-02 with IDs from 7464 to 8292:
+
+```{r, warning = FALSE}
+postpacs2 <- read_excel("../../raw_data/IPL PACS/pacs ID 7464-ID8292_2018-10-02.xlsx") %>% 
+  transmute(id                = `Material #`,
+            age               =  Age,
+            dob               = `Date of birth`,
+            sex               =  Gender,
+            home_location     = `Point of origin`,
+            travel_laos       = `Travel in Laos`,
+            travel_abroad     = `Travel abroad`,
+            onset             = `Onset date`,
+            hospitalization   = `Hospitalization date`,
+            consultation      = `Consultation date`,
+            sample_collection = `Sample collection date`,
+            pcr               =  Screening,
+            ns1               = `NS1 antigen`) %>% 
+  separate(home_location, c("country", "province", "district", "village"), "\\.") %>% 
+  select(-country) %>% 
+  mutate(id = fix_id(sub("R", "", id))) %>% 
+  mutate_if(is.POSIXct, as.Date)
+```
+
+Combining all postpacs data:
+
+```{r}
+postpacs %<>% bind_rows(postpacs2)
+```
+
 Here, compared to `prepacs`, we don't have serotype and nationality. Let's put
 `prepacs` and `pacs` together:
 

@@ -250,6 +250,35 @@ Reading `PACS.xlsx`:
 +   mutate_if(is.POSIXct, as.Date)
 ```
 
+Update of 2018-10-02 with IDs from 7464 to 8292:
+
+``` r
+> postpacs2 <- read_excel("../../raw_data/IPL PACS/pacs ID 7464-ID8292_2018-10-02.xlsx") %>% 
++   transmute(id                = `Material #`,
++             age               =  Age,
++             dob               = `Date of birth`,
++             sex               =  Gender,
++             home_location     = `Point of origin`,
++             travel_laos       = `Travel in Laos`,
++             travel_abroad     = `Travel abroad`,
++             onset             = `Onset date`,
++             hospitalization   = `Hospitalization date`,
++             consultation      = `Consultation date`,
++             sample_collection = `Sample collection date`,
++             pcr               =  Screening,
++             ns1               = `NS1 antigen`) %>% 
++   separate(home_location, c("country", "province", "district", "village"), "\\.") %>% 
++   select(-country) %>% 
++   mutate(id = fix_id(sub("R", "", id))) %>% 
++   mutate_if(is.POSIXct, as.Date)
+```
+
+Combining all postpacs data:
+
+``` r
+> postpacs %<>% bind_rows(postpacs2)
+```
+
 Here, compared to `prepacs`, we don't have serotype and nationality. Let's put `prepacs` and `pacs` together:
 
 ``` r
@@ -344,7 +373,7 @@ Calculating the age using the birth date and comparing with the age variable:
 +          age2 = as.numeric((date2 - dob) / 365)) %>% 
 +   filter(age2 > age + 1 | age2 < age - 1) %>% 
 +   select(id, age, age2, dob, onset, hospitalization, consultation, sample_collection)
-# A tibble: 157 x 8
+# A tibble: 195 x 8
       id   age     age2 dob        onset      hospitalization consultation
    <int> <dbl>    <dbl> <date>     <date>     <date>          <date>      
  1    25    10  2.01e+1 1992-05-03 2012-05-20 2012-05-23      2012-05-24  
@@ -357,7 +386,7 @@ Calculating the age using the birth date and comparing with the age variable:
  8   144    18  2.02e+1 1992-06-07 2012-08-04 NA              2012-08-08  
  9   152    37  3.58e+1 1976-11-13 2012-08-10 NA              2012-08-12  
 10   158    36  3.75e+1 1975-02-14 2012-08-06 NA              2012-08-09  
-# ... with 147 more rows, and 1 more variable: sample_collection <date>
+# ... with 185 more rows, and 1 more variable: sample_collection <date>
 ```
 
 Patching the villages names
@@ -425,7 +454,7 @@ Patching the village names:
 +   left_join(villages_patch, "id") %>% 
 +   mutate(village = if_else(is.na(Bhan), village, Bhan)) %>% 
 +   select(-Bhan)
-# A tibble: 7,460 x 17
+# A tibble: 8,288 x 17
       id nationality sex      age dob        province   district   village
    <dbl> <chr>       <fct>  <dbl> <date>     <chr>      <chr>      <chr>  
  1     1 laos        female    10 2002-02-10 Vientiane… Sisattana… Thong-…
@@ -438,7 +467,7 @@ Patching the village names:
  8     8 laos        male      13 1998-06-17 Vientiane… Chanthabu… Phonsa…
  9     9 laos        male       5 2006-12-12 Vientiane… Xaysettha… Phonxai
 10    10 laos        male      14 NA         Vientiane… Xaysettha… Chomma…
-# ... with 7,450 more rows, and 9 more variables: travel_laos <chr>,
+# ... with 8,278 more rows, and 9 more variables: travel_laos <chr>,
 #   travel_abroad <chr>, onset <date>, hospitalization <date>,
 #   consultation <date>, sample_collection <date>, pcr <fct>, ns1 <fct>,
 #   serotype <fct>
@@ -453,7 +482,7 @@ Date of birth should be before all the other dates:
 > pacs %>%
 +   filter(!(dob < onset & dob < hospitalization & dob < consultation & dob < sample_collection)) %>% 
 +   select(id, age, dob, onset, hospitalization, consultation, sample_collection)
-# A tibble: 14 x 7
+# A tibble: 17 x 7
       id   age dob        onset      hospitalization consultation
    <int> <dbl> <date>     <date>     <date>          <date>      
  1    86  5    2012-11-06 2012-07-08 2012-07-13      2012-07-13  
@@ -470,6 +499,9 @@ Date of birth should be before all the other dates:
 12  5246  4    2017-06-13 2017-02-09 2017-02-13      2017-02-13  
 13  6441  5    2017-12-30 2017-08-11 2017-08-14      2017-08-16  
 14  6980 11    2017-10-08 2017-10-06 2017-10-08      2017-10-08  
+15  7561  7    2018-07-16 2018-05-17 2018-05-19      2018-05-20  
+16  7734 26    2018-11-25 NA         NA              2018-06-28  
+17  7954  6    2018-09-23 2018-07-07 2018-08-06      2018-08-06  
 # ... with 1 more variable: sample_collection <date>
 ```
 
@@ -479,7 +511,7 @@ Onset should be before hospitalization, consultation and date of collection:
 > pacs %>%
 +   filter(!(onset <= hospitalization & onset <= consultation & onset <= sample_collection)) %>% 
 +   select(id, age, dob, onset, hospitalization, consultation, sample_collection)
-# A tibble: 87 x 7
+# A tibble: 105 x 7
       id   age dob        onset      hospitalization consultation
    <int> <dbl> <date>     <date>     <date>          <date>      
  1     4    45 NA         2012-09-04 NA              2012-10-04  
@@ -492,7 +524,7 @@ Onset should be before hospitalization, consultation and date of collection:
  8   813    11 NA         2013-06-16 NA              2013-06-19  
  9  1348     3 NA         2103-06-21 2013-06-26      2013-06-26  
 10  1491    11 2001-09-19 2013-07-06 2013-07-05      2013-07-06  
-# ... with 77 more rows, and 1 more variable: sample_collection <date>
+# ... with 95 more rows, and 1 more variable: sample_collection <date>
 ```
 
 Writing to disk
