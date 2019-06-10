@@ -2,5 +2,5 @@
 .Rhistory
 .RData
 .Ruserdata
-README_cache/
 .DS_Store
+make_data_cache/

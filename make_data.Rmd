@@ -1,7 +1,13 @@
 ---
-output: github_document
-editor_options: 
-  chunk_output_type: console
+title: "Cleaning PACS data"
+csl: the-american-naturalist.csl
+output:
+  html_document:
+    theme: cerulean
+    toc: yes
+  pdf_document:
+    toc: yes
+<!-- bibliography: references.bib -->
 ---
 
 <!--
@@ -36,28 +42,6 @@ knitr::opts_chunk$set(margin = TRUE, prompt = TRUE, comment = "",
 
 ```
 
-## Preambule
-
-Because the PACS system was adopted after the surveillance had already started,
-and because all the data collected prior PACS adoption have not been all entered
-in the PACS system yet, the data are in several files in the `raw_data/PACS`
-folder of the DropBox Ecomore2 folder:
-
-* `pre-PACS.xlsx` that contains data from aterial **#1** to material **#3718**
-and which is the data that were entered before adopting PACS at IPL;
-* `PACS.xls` that contains data from material **#3370** to Material **#7463**
-and which is the data that were entered directly into PACS and retrieved from it;
-* `pacs ID 7464-ID8292_2018-10-02.xlsx` weekly update.
-
-These files will be loaded into the `prepacs` and `postpacs` data frames
-respectively and binded together in the `pacs` data frame. After merging with
-the GPS data (see [here](https://github.com/ecomore2/gps)), the cleaned and
-reshaped data are saved to disk on `pacs.csv` and `pacs.rds` files in the
-`cleaned_data` folder of the DropBox Ecomore2 folder.
-
-**NOTE:** the age, date of birth, sample date collection and some village
-names are corrected are patched.
-
 ## Packages
 
 Packages currently installed on the system:
@@ -83,21 +67,14 @@ cran <- c("devtools",  # development tools
 Installing these packages when not already installed:
 
 ```{r}
-to_install <- !cran %in% installed_packages
-if (any(to_install)) install.packages(cran[to_install])
-```
-
-We additionally need the `ecomore` package from
-[GitHub](https://github.com/ecomore2/ecomore):
-
-```{r}
-if (! "ecomore" %in% installed_packages)  devtools::install_github("ecomore2/ecomore")
+to_install <- setdiff(cran, installed_packages)
+if (length(to_install)) install.packages(to_install)
 ```
 
 Loading the packages for interactive use at the command line:
 
 ```{r message = FALSE}
-invisible(lapply(c(setdiff(cran, "devtools"), "ecomore"), library, character.only = TRUE))
+invisible(lapply(setdiff(cran, "devtools"), library, character.only = TRUE))
 ```
 
 ## Utilitary functions
@@ -429,9 +406,9 @@ pacs %>%
 Reading the corrected village names:
 
 ```{r}
-villages_patch <- read_excel("../../raw_data/IPL PACS/Villages a retrouver.xlsx", "Ecomore 2") %>%
+villages_patch <- readxl::read_excel("../../raw_data/IPL PACS/Villages a retrouver.xlsx", "Ecomore 2") %>%
   transmute(id   = id,
-            Bhan = Bhan %>%
+            Bhan = `Bhan corrigé` %>%
                    str_to_title() %>% 
                    trimws() %>% 
                    gsub("  *", " ", .))
@@ -505,15 +482,7 @@ pacs %>%
 ## Writing to disk
 
 ```{r}
-file <- "../../cleaned_data/pacs.rds"
-if (file.exists(file)) {
-  pacs_file <- readRDS(file)
-  if ("source" %in% names(pacs_file)) {
-    pacs %>% 
-      full_join(select(pacs_file, id, source, longitude, latitude), "id") %>% 
-      write2disk("cleaned_data", "pacs")
-  } else {
-    write2disk(pacs, "cleaned_data", "pacs")
-  }
-} else write2disk(pacs, "cleaned_data", "pacs")
+if (!dir.exists("data")) dir.create("data")
+write.csv(pacs, "data/pacs.csv", FALSE, row.names = FALSE)
 ```
+
