@@ -31,8 +31,9 @@ patched with corrections:
     villages names.
 
 The cleaned and reshaped data are saved to the `data\pacs.csv` CSV file
-that can be copy-pasted from [here]() or downloaded directly from R into
-a data
+that can be copy-pasted from
+[here](https://raw.githubusercontent.com/ecomore2/pacs/master/data/pacs.csv)
+or downloaded directly from R into a data
 frame:
 
 ``` r
