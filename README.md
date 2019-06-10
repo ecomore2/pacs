@@ -41,3 +41,6 @@ if (! "readr" %in% rownames(installed.packages())) install.packages("readr")
 pacs <- readr::read_csv("https://raw.githubusercontent.com/ecomore2/pacs/master/data/pacs.csv",
                         col_types = paste(c("icfnD", rep("c", 5), rep("D", 4), rep("f", 3)), collapse = ""))
 ```
+
+The variables names are meaningful in themselves. A case will be
+considered as confirmed if any of the `pcr` and `ns1` is positive.
