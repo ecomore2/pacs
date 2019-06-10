@@ -8,6 +8,8 @@ output:
   pdf_document:
     toc: yes
 <!-- bibliography: references.bib -->
+editor_options: 
+  chunk_output_type: console
 ---
 
 <!--
