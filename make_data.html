@@ -405,23 +405,19 @@ title wherever you want to display the reference list.
 -->
 <div id="packages" class="section level2">
 <h2>Packages</h2>
-<p>Packages currently installed on the system:</p>
-<pre class="r"><code>&gt; installed_packages &lt;- rownames(installed.packages())</code></pre>
 <p>Packages that we need from <a href="https://cran.r-project.org">CRAN</a>:</p>
-<pre class="r"><code>&gt; cran &lt;- c(&quot;devtools&quot;,  # development tools
-+           &quot;dplyr&quot;,     # data frames manipulation
+<pre class="r"><code>&gt; cran &lt;- c(&quot;dplyr&quot;,     # data frames manipulation
 +           &quot;lubridate&quot;, # dealing with dates
 +           &quot;magrittr&quot;,  # pipe operators
 +           &quot;purrr&quot;,     # functional programming tools
 +           &quot;readxl&quot;,    # reading excel files
 +           &quot;stringr&quot;,   # string operations
-+           &quot;tidyr&quot;      # tidying data
-+           )</code></pre>
++           &quot;tidyr&quot;)     # tidying data</code></pre>
 <p>Installing these packages when not already installed:</p>
-<pre class="r"><code>&gt; to_install &lt;- setdiff(cran, installed_packages)
+<pre class="r"><code>&gt; to_install &lt;- setdiff(cran, rownames(installed.packages()))
 &gt; if (length(to_install)) install.packages(to_install)</code></pre>
 <p>Loading the packages for interactive use at the command line:</p>
-<pre class="r"><code>&gt; invisible(lapply(setdiff(cran, &quot;devtools&quot;), library, character.only = TRUE))</code></pre>
+<pre class="r"><code>&gt; invisible(lapply(cran, library, character.only = TRUE))</code></pre>
 </div>
 <div id="utilitary-functions" class="section level2">
 <h2>Utilitary functions</h2>

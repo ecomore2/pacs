@@ -44,37 +44,29 @@ knitr::opts_chunk$set(margin = TRUE, prompt = TRUE, comment = "",
 
 ## Packages
 
-Packages currently installed on the system:
-
-```{r}
-installed_packages <- rownames(installed.packages())
-```
-
 Packages that we need from [CRAN](https://cran.r-project.org):
 
 ```{r}
-cran <- c("devtools",  # development tools
-          "dplyr",     # data frames manipulation
+cran <- c("dplyr",     # data frames manipulation
           "lubridate", # dealing with dates
           "magrittr",  # pipe operators
           "purrr",     # functional programming tools
           "readxl",    # reading excel files
           "stringr",   # string operations
-          "tidyr"      # tidying data
-          )
+          "tidyr")     # tidying data
 ```
 
 Installing these packages when not already installed:
 
 ```{r}
-to_install <- setdiff(cran, installed_packages)
+to_install <- setdiff(cran, rownames(installed.packages()))
 if (length(to_install)) install.packages(to_install)
 ```
 
 Loading the packages for interactive use at the command line:
 
 ```{r message = FALSE}
-invisible(lapply(setdiff(cran, "devtools"), library, character.only = TRUE))
+invisible(lapply(cran, library, character.only = TRUE))
 ```
 
 ## Utilitary functions
