@@ -46,4 +46,4 @@ pacs <- readr::read_csv("https://raw.githubusercontent.com/ecomore2/pacs/master/
 ```
 
 The variables names are meaningful in themselves. A case will be considered as
-confirmed if any of the `pcr` and `ns1` is positive.
+confirmed if at least one of the `pcr` and `ns1` is positive.
