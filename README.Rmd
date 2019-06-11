@@ -10,7 +10,8 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 ```
-# pacs
+
+# PACS data
 
 <!-- badges: start -->
 <!-- badges: end -->
