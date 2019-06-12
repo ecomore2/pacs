@@ -386,6 +386,7 @@ $(document).ready(function () {
 <li><a href="#testing-the-ages">Testing the ages</a></li>
 <li><a href="#patching-the-villages-names">Patching the villages names</a></li>
 <li><a href="#testing-the-dates">Testing the dates</a></li>
+<li><a href="#patching-dates">Patching dates</a></li>
 <li><a href="#writing-to-disk">Writing to disk</a></li>
 </ul>
 </div>
@@ -773,6 +774,13 @@ has_village FALSE TRUE
  9  1348     3 NA         2103-06-21 2013-06-26      2013-06-26  
 10  1491    11 2001-09-19 2013-07-06 2013-07-05      2013-07-06  
 # … with 95 more rows, and 1 more variable: sample_collection &lt;date&gt;</code></pre>
+</div>
+<div id="patching-dates" class="section level2">
+<h2>Patching dates</h2>
+<pre class="r"><code>&gt; for(var in c(&quot;onset&quot;, &quot;hospitalization&quot;, &quot;consultation&quot;, &quot;sample_collection&quot;)) {
++   pacs[[var]] &lt;- sub(&quot;2103(-.*$)&quot;, &quot;2013\\1&quot;, pacs[[var]])
++   pacs[[var]] &lt;- as.Date(sub(&quot;2023(-.*$)&quot;, &quot;2013\\1&quot;, pacs[[var]]))
++ }</code></pre>
 </div>
 <div id="writing-to-disk" class="section level2">
 <h2>Writing to disk</h2>
