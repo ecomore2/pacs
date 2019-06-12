@@ -52,3 +52,54 @@ knitr::opts_chunk$set(margin = TRUE, prompt = TRUE, comment = "",
 options(width = 137)
 ```
 
+```{r}
+if (! "readr" %in% rownames(installed.packages())) install.packages("readr")
+pacs <- readr::read_csv("https://raw.githubusercontent.com/ecomore2/pacs/master/data/pacs.csv",
+                        col_types = paste(c("icfnD", rep("c", 5), rep("D", 4), rep("f", 3)), collapse = ""))
+```
+
+```{r}
+library(dplyr)
+```
+
+## Errors on the dates
+
+Let's explore the time differences between the 4 dates:
+
+```{r}
+pacs %>% 
+  filter(abs(onset - hospitalization) > 15 |
+         abs(onset - consultation) > 15 |
+         abs(onset - sample_collection) > 15 |
+         abs(hospitalization - consultation) > 15 |
+         abs(hospitalization - sample_collection) > 15 |
+         abs(consultation    - sample_collection) > 15) %>% 
+  select(id, onset, hospitalization, consultation, sample_collection)
+```
+
+```{r include = FALSE, eval = FALSE}
+write.csv("dates_to_check.csv", quote = FALSE, row.names = FALSE)
+```
+
+*   1: error on the year
+*   4: day and month were switched for onset and consultation
+*   6: day and month were switcheid for hospitalization and consultation
+*   7: day and month were switched for onset
+*  28: day and month were switched for onset
+*  33: day and month were switched for onset
+*  71: year for consultation and sample_collection are not compatible
+*  85: I suspect it should be be December 2012, but should be verified
+* 159: probably no error
+* 167: day and month were switched for consultation and sample_collection
+
+## Positive cases without any date
+
+```{r}
+pacs %>% 
+  filter(is.na(onset), is.na(hospitalization), is.na(consultation), is.na(sample_collection)) %>% 
+  filter(pcr == "positive" | ns1 == "positive") %>% 
+  select(id) %>% 
+  unlist() %>%
+  unname()
+```
+

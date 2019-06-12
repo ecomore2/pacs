@@ -377,6 +377,12 @@ $(document).ready(function () {
 
 </div>
 
+<div id="TOC">
+<ul>
+<li><a href="#errors-on-the-dates">Errors on the dates</a></li>
+<li><a href="#positive-cases-without-any-date">Positive cases without any date</a></li>
+</ul>
+</div>
 
 <!--
 IMAGES:
@@ -398,6 +404,70 @@ title wherever you want to display the reference list.
   margin-right: auto;
 }
 </style>
+<pre class="r"><code>&gt; if (! &quot;readr&quot; %in% rownames(installed.packages())) install.packages(&quot;readr&quot;)
+&gt; pacs &lt;- readr::read_csv(&quot;https://raw.githubusercontent.com/ecomore2/pacs/master/data/pacs.csv&quot;,
++                         col_types = paste(c(&quot;icfnD&quot;, rep(&quot;c&quot;, 5), rep(&quot;D&quot;, 4), rep(&quot;f&quot;, 3)), collapse = &quot;&quot;))</code></pre>
+<pre class="r"><code>&gt; library(dplyr)
+
+Attaching package: &#39;dplyr&#39;
+The following objects are masked from &#39;package:stats&#39;:
+
+    filter, lag
+The following objects are masked from &#39;package:base&#39;:
+
+    intersect, setdiff, setequal, union</code></pre>
+<div id="errors-on-the-dates" class="section level2">
+<h2>Errors on the dates</h2>
+<p>Let’s explore the time differences between the 4 dates:</p>
+<pre class="r"><code>&gt; pacs %&gt;% 
++   filter(abs(onset - hospitalization) &gt; 15 |
++          abs(onset - consultation) &gt; 15 |
++          abs(onset - sample_collection) &gt; 15 |
++          abs(hospitalization - consultation) &gt; 15 |
++          abs(hospitalization - sample_collection) &gt; 15 |
++          abs(consultation    - sample_collection) &gt; 15) %&gt;% 
++   select(id, onset, hospitalization, consultation, sample_collection)
+# A tibble: 359 x 5
+      id onset      hospitalization consultation sample_collection
+   &lt;int&gt; &lt;date&gt;     &lt;date&gt;          &lt;date&gt;       &lt;date&gt;           
+ 1     1 2012-03-24 2012-03-25      2012-03-25   2013-03-26       
+ 2     4 2012-09-04 NA              2012-10-04   2012-04-09       
+ 3     6 2012-04-28 2012-06-05      2012-06-05   2012-05-08       
+ 4     7 2012-03-05 NA              2012-05-08   2012-05-08       
+ 5    28 2012-03-06 NA              2012-06-06   2012-06-06       
+ 6    33 2012-05-06 NA              2012-06-08   2012-06-08       
+ 7    71 NA         NA              2012-07-10   2015-07-10       
+ 8    85 2012-07-10 NA              2012-07-12   2012-12-01       
+ 9   159 2012-07-25 NA              2012-08-10   2012-08-10       
+10   167 2012-08-08 NA              2012-09-08   2012-09-08       
+# … with 349 more rows</code></pre>
+<ul>
+<li>1: error on the year</li>
+<li>4: day and month were switched for onset and consultation</li>
+<li>6: day and month were switcheid for hospitalization and consultation</li>
+<li>7: day and month were switched for onset</li>
+<li>28: day and month were switched for onset</li>
+<li>33: day and month were switched for onset</li>
+<li>71: year for consultation and sample_collection are not compatible</li>
+<li>85: I suspect it should be be December 2012, but should be verified</li>
+<li>159: probably no error</li>
+<li>167: day and month were switched for consultation and sample_collection</li>
+</ul>
+</div>
+<div id="positive-cases-without-any-date" class="section level2">
+<h2>Positive cases without any date</h2>
+<pre class="r"><code>&gt; pacs %&gt;% 
++   filter(is.na(onset), is.na(hospitalization), is.na(consultation), is.na(sample_collection)) %&gt;% 
++   filter(pcr == &quot;positive&quot; | ns1 == &quot;positive&quot;) %&gt;% 
++   select(id) %&gt;% 
++   unlist() %&gt;%
++   unname()
+  [1]   13  126  304  305  353  479  519  526  574  777  864  937  941  942  961 1064 1073 1112 1115 1189 1201 1202 1211 1212 1213 1262
+ [27] 1274 1275 1276 1281 1282 1286 1305 1307 1308 1373 1382 1383 1404 1420 1425 1572 1601 1718 1732 1836 1858 1869 2016 2149 2150 2152
+ [53] 2187 2208 2217 2280 2337 2342 2521 2559 2712 2817 2932 2933 2934 2935 3016 3017 3396 3397 3416 4258 4312 5066 5100 5152 5187 5188
+ [79] 5545 5634 5970 6118 6166 6222 6319 6444 6673 6746 6976 7174 7202 7343 7354 7495 7496 7497 7498 7499 7501 7504 7505 7506 7507 7509
+[105] 7510 7511 7512 7514 7516 7517 7518 7548 7551 7553 7602 7840 7881 7922 7928 8008 8010 8011 8013 8025 8076 8137 8140 8141</code></pre>
+</div>
 
 
 
