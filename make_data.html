@@ -387,7 +387,7 @@ $(document).ready(function () {
 <li><a href="#patching-the-villages-names">Patching the villages names</a></li>
 <li><a href="#testing-the-dates">Testing the dates</a></li>
 <li><a href="#patching-dates">Patching dates</a></li>
-<li><a href="#fixing-provinces-and-vcs-districts-names">Fixing provinces and VC’s districts names</a></li>
+<li><a href="#fixing-provinces-and-vps-districts-names">Fixing provinces and VP’s districts names</a></li>
 <li><a href="#writing-to-disk">Writing to disk</a></li>
 </ul>
 </div>
@@ -784,8 +784,8 @@ has_village FALSE TRUE
 +   pacs[[var]] &lt;- as.Date(sub(&quot;2023(-.*$)&quot;, &quot;2013\\1&quot;, pacs[[var]]))
 + }</code></pre>
 </div>
-<div id="fixing-provinces-and-vcs-districts-names" class="section level2">
-<h2>Fixing provinces and VC’s districts names</h2>
+<div id="fixing-provinces-and-vps-districts-names" class="section level2">
+<h2>Fixing provinces and VP’s districts names</h2>
 <pre class="r"><code>&gt; dictionary &lt;- c(&quot;Attapeu&quot;            = &quot;Attapu&quot;,
 +                 &quot;Champasack&quot;         = &quot;Champasak&quot;,
 +                 &quot;Khammouane&quot;         = &quot;Khammouan&quot;,
@@ -807,6 +807,35 @@ has_village FALSE TRUE
 +                 &quot;Xiengkhuang&quot;        = &quot;Xiangkhoang&quot;)
 &gt; tmp &lt;- setdiff(unique(pacs$province), names(dictionary))
 &gt; pacs$province &lt;- c(setNames(tmp, tmp), dictionary)[pacs$province]</code></pre>
+<pre class="r"><code>&gt; pacs[which(pacs$district == &quot;Xaysettha district Attapeu&quot;), &quot;province&quot;] &lt;- &quot;Attapu&quot;
+&gt; pacs[which(pacs$district == &quot;vangvieng district&quot;), &quot;province&quot;] &lt;- &quot;Vientiane&quot;
+&gt; pacs[which(pacs$district == &quot;thoulakhom district&quot;), &quot;province&quot;] &lt;- &quot;Vientiane&quot;
+&gt; pacs[which(pacs$district == &quot;phonehong district&quot;), &quot;province&quot;] &lt;- &quot;Vientiane&quot;
+&gt; pacs[which(pacs$district == &quot;Bolikhanh&quot;), &quot;province&quot;] &lt;- &quot;Bolikhamxai&quot;
+&gt; pacs[which(pacs$district == &quot;Pakkading&quot;), &quot;province&quot;] &lt;- &quot;Bolikhamxai&quot;
+&gt; pacs[which(pacs$district == &quot;Samakkhixay&quot;), &quot;province&quot;] &lt;- &quot;Attapu&quot;
+&gt; pacs[which(pacs$district == &quot;Sukhuma&quot;), &quot;province&quot;] &lt;- &quot;Champasak&quot;
+&gt; pacs[which(pacs$district == &quot;Other&quot;), &quot;district&quot;] &lt;- NA
+&gt; 
+&gt; dictionary &lt;- c(&quot;Chanthaboury&quot;               = &quot;Chanthabuly&quot;,
++                 &quot;Chanthabuly district&quot;       = &quot;Chanthabuly&quot;,
++                 &quot;Hadsayfong district&quot;        = &quot;Hadxaifong&quot;,       
++                 &quot;Hadxaifong district&quot;        = &quot;Hadxaifong&quot;,
++                 &quot;Hardsaiyfong district&quot;      = &quot;Hadxaifong&quot;,
++                 &quot;Nasaiythong district&quot;       = &quot;Naxaithong&quot;,
++                 &quot;Naxaythong district&quot;        = &quot;Naxaithong&quot;,       
++                 &quot;Saysettha&quot;                  = &quot;Xaysetha&quot;,
++                 &quot;Saythany&quot;                   = &quot;Xaythany&quot;,                  
++                 &quot;Sikhot district&quot;            = &quot;Sikhottabong&quot;,
++                 &quot;Sikhotabong&quot;                = &quot;Sikhottabong&quot;,
++                 &quot;Sikhotabong district&quot;       = &quot;Sikhottabong&quot;,
++                 &quot;Sisattanak district&quot;        = &quot;Sisattanak&quot;,
++                 &quot;Sungthong district&quot;         = &quot;Sangthong&quot;,
++                 &quot;Xaysettha district&quot;         = &quot;Xaysetha&quot;,
++                 &quot;Xaythany district&quot;          = &quot;Xaythany&quot;)
+&gt; 
+&gt; tmp &lt;- setdiff(unique(pacs$district), names(dictionary))
+&gt; pacs$district &lt;- c(setNames(tmp, tmp), dictionary)[pacs$district]</code></pre>
 </div>
 <div id="writing-to-disk" class="section level2">
 <h2>Writing to disk</h2>

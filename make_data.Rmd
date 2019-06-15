@@ -483,7 +483,7 @@ for(var in c("onset", "hospitalization", "consultation", "sample_collection")) {
 }
 ```
 
-## Fixing provinces and VC's districts names
+## Fixing provinces and VP's districts names
 
 ```{r}
 dictionary <- c("Attapeu"            = "Attapu",
@@ -507,6 +507,38 @@ dictionary <- c("Attapeu"            = "Attapu",
                 "Xiengkhuang"        = "Xiangkhoang")
 tmp <- setdiff(unique(pacs$province), names(dictionary))
 pacs$province <- c(setNames(tmp, tmp), dictionary)[pacs$province]
+```
+
+```{r}
+pacs[which(pacs$district == "Xaysettha district Attapeu"), "province"] <- "Attapu"
+pacs[which(pacs$district == "vangvieng district"), "province"] <- "Vientiane"
+pacs[which(pacs$district == "thoulakhom district"), "province"] <- "Vientiane"
+pacs[which(pacs$district == "phonehong district"), "province"] <- "Vientiane"
+pacs[which(pacs$district == "Bolikhanh"), "province"] <- "Bolikhamxai"
+pacs[which(pacs$district == "Pakkading"), "province"] <- "Bolikhamxai"
+pacs[which(pacs$district == "Samakkhixay"), "province"] <- "Attapu"
+pacs[which(pacs$district == "Sukhuma"), "province"] <- "Champasak"
+pacs[which(pacs$district == "Other"), "district"] <- NA
+
+dictionary <- c("Chanthaboury"               = "Chanthabuly",
+                "Chanthabuly district"       = "Chanthabuly",
+                "Hadsayfong district"        = "Hadxaifong",       
+                "Hadxaifong district"        = "Hadxaifong",
+                "Hardsaiyfong district"      = "Hadxaifong",
+                "Nasaiythong district"       = "Naxaithong",
+                "Naxaythong district"        = "Naxaithong",       
+                "Saysettha"                  = "Xaysetha",
+                "Saythany"                   = "Xaythany",                  
+                "Sikhot district"            = "Sikhottabong",
+                "Sikhotabong"                = "Sikhottabong",
+                "Sikhotabong district"       = "Sikhottabong",
+                "Sisattanak district"        = "Sisattanak",
+                "Sungthong district"         = "Sangthong",
+                "Xaysettha district"         = "Xaysetha",
+                "Xaythany district"          = "Xaythany")
+
+tmp <- setdiff(unique(pacs$district), names(dictionary))
+pacs$district <- c(setNames(tmp, tmp), dictionary)[pacs$district]
 ```
 
 ## Writing to disk
