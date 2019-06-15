@@ -71,6 +71,10 @@ library(padr)
 library(sfsmisc)
 ```
 
+```{r}
+if (!dir.exists("problems")) dir.create("problems")
+```
+
 ```{r time_range_of_pacs}
 mindate <- pacs %>%
   select(onset, hospitalization, consultation, sample_collection) %>% 
@@ -102,20 +106,17 @@ problems <- pacs %>%
          abs(consultation_sample_collection)    > threshold) %>% 
   select(id, onset, hospitalization, consultation, sample_collection)
 
-if (!dir.exists("problems")) dir.create("problems")
 write.csv(problems, "problems/dates.csv", FALSE, row.names = FALSE)
 ```
 
-As of `r as.Date(Sys.time())`, the PACS data set contains `r nrow(pacs)` cases
-reported from `r mindate` to `r maxdate`. There are `r nrow(problems)` cases for
-which there are more than `r threshold` days between at least one pair of dates
-among onset, consultation, hospitalization and sample collection. A CSV file of
-these cases is [here](https://github.com/ecomore2/pacs/blob/master/problems/dates.csv).
-Go [here](https://raw.githubusercontent.com/ecomore2/pacs/master/problems/dates.csv)
-if you want to copy and paste this CSV file to your computer.
+```{r number_of_cases_with_no_dates}
+no_dates <- pacs %>%
+  filter(is.na(onset), is.na(hospitalization), is.na(consultation), is.na(sample_collection)) %>% 
+  select(id, onset, hospitalization, consultation, sample_collection)
+write.csv(no_dates, "problems/no_dates.csv", FALSE, row.names = FALSE)
+```
 
 ```{r}
-threshold <- 15
 dates_diff <- pacs %>% 
   mutate(onset_hospitalization             = as.integer(onset           - hospitalization),
          onset_consultation                = as.integer(onset           - consultation),
@@ -137,6 +138,20 @@ dates_diff <- pacs %>%
          consultation_sample_collection)
 ```
 
+As of `r as.Date(Sys.time())`, the PACS data set contains `r nrow(pacs)` cases
+reported from `r mindate` to `r maxdate`. There are `r nrow(problems)` cases for
+which there are more than `r threshold` days between at least one pair of dates
+among onset, consultation, hospitalization and sample collection. A CSV file of
+these cases is [here](https://github.com/ecomore2/pacs/blob/master/problems/dates.csv).
+Go [here](https://raw.githubusercontent.com/ecomore2/pacs/master/problems/dates.csv)
+if you want to copy and paste this CSV file to your computer. Furthermore, there
+are `r nrow(no_dates)` cases with no date at all. A CSV file of these cases is
+[here](https://github.com/ecomore2/pacs/blob/master/problems/dates.csv).
+Go [here](https://raw.githubusercontent.com/ecomore2/pacs/master/problems/dates.csv)
+if you want to copy and paste this CSV file to your computer.
+
+After removing these `r nrow(problems)` cases with date problems as well as the `r nrow(no_dates)` cases and inferring the missing onset
+dates from
 
 The status of the PCR and NS1 tests
 are as follows:
