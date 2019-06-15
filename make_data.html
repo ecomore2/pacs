@@ -387,6 +387,7 @@ $(document).ready(function () {
 <li><a href="#patching-the-villages-names">Patching the villages names</a></li>
 <li><a href="#testing-the-dates">Testing the dates</a></li>
 <li><a href="#patching-dates">Patching dates</a></li>
+<li><a href="#fixing-provinces-and-vcs-districts-names">Fixing provinces and VC’s districts names</a></li>
 <li><a href="#writing-to-disk">Writing to disk</a></li>
 </ul>
 </div>
@@ -782,6 +783,30 @@ has_village FALSE TRUE
 +   pacs[[var]] &lt;- sub(&quot;2105(-.*$)&quot;, &quot;2015\\1&quot;, pacs[[var]])
 +   pacs[[var]] &lt;- as.Date(sub(&quot;2023(-.*$)&quot;, &quot;2013\\1&quot;, pacs[[var]]))
 + }</code></pre>
+</div>
+<div id="fixing-provinces-and-vcs-districts-names" class="section level2">
+<h2>Fixing provinces and VC’s districts names</h2>
+<pre class="r"><code>&gt; dictionary &lt;- c(&quot;Attapeu&quot;            = &quot;Attapu&quot;,
++                 &quot;Champasack&quot;         = &quot;Champasak&quot;,
++                 &quot;Khammouane&quot;         = &quot;Khammouan&quot;,
++                 &quot;Khammouanee&quot;        = &quot;Khammouan&quot;,
++                 &quot;Louangphabang&quot;      = &quot;Louangphrabang&quot;,
++                 &quot;Luangnamtha&quot;        = &quot;Louang Namtha&quot;,
++                 &quot;Oudomxai&quot;           = &quot;Oudômxai&quot;,
++                 &quot;Phongsaly&quot;          = &quot;Phôngsali&quot;,
++                 &quot;Saravan&quot;            = &quot;Saravan&quot;,
++                 &quot;Savannakhet&quot;        = &quot;Savannakhét&quot;,
++                 &quot;Saysomboun&quot;         = &quot;Xaisômboun&quot;,
++                 &quot;Sekong&quot;             = &quot;Xékong&quot;,
++                 &quot;Vientiane Capital&quot;  = &quot;Vientiane [prefecture]&quot;,
++                 &quot;Vientiane Province&quot; = &quot;Vientiane&quot;,
++                 &quot;Xaignabouli&quot;        = &quot;Xaignabouri&quot;,
++                 &quot;Xayabuly&quot;           = &quot;Xaignabouri&quot;,
++                 &quot;Xaysomboune&quot;        = &quot;Xaisômboun&quot;,
++                 &quot;Xekong&quot;             = &quot;Xékong&quot;,
++                 &quot;Xiengkhuang&quot;        = &quot;Xiangkhoang&quot;)
+&gt; tmp &lt;- setdiff(unique(pacs$province), names(dictionary))
+&gt; pacs$province &lt;- c(setNames(tmp, tmp), dictionary)[pacs$province]</code></pre>
 </div>
 <div id="writing-to-disk" class="section level2">
 <h2>Writing to disk</h2>

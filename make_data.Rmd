@@ -483,6 +483,32 @@ for(var in c("onset", "hospitalization", "consultation", "sample_collection")) {
 }
 ```
 
+## Fixing provinces and VC's districts names
+
+```{r}
+dictionary <- c("Attapeu"            = "Attapu",
+                "Champasack"         = "Champasak",
+                "Khammouane"         = "Khammouan",
+                "Khammouanee"        = "Khammouan",
+                "Louangphabang"      = "Louangphrabang",
+                "Luangnamtha"        = "Louang Namtha",
+                "Oudomxai"           = "Oudômxai",
+                "Phongsaly"          = "Phôngsali",
+                "Saravan"            = "Saravan",
+                "Savannakhet"        = "Savannakhét",
+                "Saysomboun"         = "Xaisômboun",
+                "Sekong"             = "Xékong",
+                "Vientiane Capital"  = "Vientiane [prefecture]",
+                "Vientiane Province" = "Vientiane",
+                "Xaignabouli"        = "Xaignabouri",
+                "Xayabuly"           = "Xaignabouri",
+                "Xaysomboune"        = "Xaisômboun",
+                "Xekong"             = "Xékong",
+                "Xiengkhuang"        = "Xiangkhoang")
+tmp <- setdiff(unique(pacs$province), names(dictionary))
+pacs$province <- c(setNames(tmp, tmp), dictionary)[pacs$province]
+```
+
 ## Writing to disk
 
 ```{r}
