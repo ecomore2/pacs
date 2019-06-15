@@ -1,5 +1,5 @@
 ---
-title: "Summarizng the PACS data"
+title: "Summary of the state of the PACS data set"
 csl: the-american-naturalist.csl
 output:
   html_document:
@@ -44,15 +44,13 @@ knitr::knit_hooks$set(
     options(prompt = if (options$engine %in% c("sh", "bash")) "$ " else "> ")
   })
 
-knitr::opts_chunk$set(margin = TRUE, prompt = TRUE, comment = "",
+knitr::opts_chunk$set(margin = TRUE, prompt = TRUE, comment = "", echo = FALSE,
                       collapse = TRUE, cache = FALSE, autodep = TRUE,
                       dev.args = list(pointsize = 11), fig.height = 3.5,
                       fig.width = 4.24725, fig.retina = 2, fig.align = "center")
 
 options(width = 137)
 ```
-
-## Required package
 
 ```{r eval = FALSE}
 if (! "readr" %in% rownames(installed.packages())) install.packages("readr")
@@ -71,5 +69,85 @@ library(dplyr)
 library(lubridate)
 library(padr)
 library(sfsmisc)
+```
+
+```{r time_range_of_pacs}
+mindate <- pacs %>%
+  select(onset, hospitalization, consultation, sample_collection) %>% 
+  lapply(min, na.rm = TRUE) %>% 
+  purrr::reduce(c) %>% 
+  min()
+
+maxdate <- pacs %>%
+  select(onset, hospitalization, consultation, sample_collection) %>% 
+  lapply(max, na.rm = TRUE) %>% 
+  purrr::reduce(c) %>% 
+  max()
+```
+
+```{r problems_in_dates}
+threshold <- 15
+problems <- pacs %>% 
+  mutate(onset_hospitalization             = as.integer(onset           - hospitalization),
+         onset_consultation                = as.integer(onset           - consultation),
+         onset_sample_collection           = as.integer(onset           - sample_collection),
+         hospitalization_consultation      = as.integer(hospitalization - consultation),
+         hospitalization_sample_collection = as.integer(hospitalization - sample_collection),
+         consultation_sample_collection    = as.integer(consultation    - sample_collection)) %>% 
+  filter(abs(onset_hospitalization)             > threshold |
+         abs(onset_consultation)                > threshold |
+         abs(onset_sample_collection)           > threshold |
+         abs(hospitalization_consultation)      > threshold |
+         abs(hospitalization_sample_collection) > threshold |
+         abs(consultation_sample_collection)    > threshold) %>% 
+  select(id, onset, hospitalization, consultation, sample_collection)
+
+if (!dir.exists("problems")) dir.create("problems")
+write.csv(problems, "problems/dates.csv", FALSE, row.names = FALSE)
+```
+
+As of `r as.Date(Sys.time())`, the PACS data set contains `r nrow(pacs)` cases
+reported from `r mindate` to `r maxdate`. There are `r nrow(problems)` cases for
+which there are more than `r threshold` days between at least one pair of dates
+among onset, consultation, hospitalization and sample collection. A CSV of these
+cases is here.
+
+
+
+```{r}
+threshold <- 15
+dates_diff <- pacs %>% 
+  mutate(onset_hospitalization             = as.integer(onset           - hospitalization),
+         onset_consultation                = as.integer(onset           - consultation),
+         onset_sample_collection           = as.integer(onset           - sample_collection),
+         hospitalization_consultation      = as.integer(hospitalization - consultation),
+         hospitalization_sample_collection = as.integer(hospitalization - sample_collection),
+         consultation_sample_collection    = as.integer(consultation    - sample_collection)) %>% 
+  filter(abs(onset_hospitalization)             < threshold,
+         abs(onset_consultation)                < threshold,
+         abs(onset_sample_collection)           < threshold,
+         abs(hospitalization_consultation)      < threshold,
+         abs(hospitalization_sample_collection) < threshold,
+         abs(consultation_sample_collection)    < threshold) %>% 
+  select(onset_hospitalization,
+         onset_consultation,
+         onset_sample_collection,
+         hospitalization_consultation,
+         hospitalization_sample_collection,
+         consultation_sample_collection)
+```
+
+
+The status of the PCR and NS1 tests
+are as follows:
+
+```{r}
+f <- function(x)
+  factor(sub("_", " ", x),
+         c("positive", "equivocal", "negative", "not finished", "not tested"))
+pacs %>% 
+  mutate(pcr = f(pcr),
+         ns1 = f(ns1)) %$% 
+  table(pcr, ns1)
 ```
 
