@@ -779,6 +779,7 @@ has_village FALSE TRUE
 <h2>Patching dates</h2>
 <pre class="r"><code>&gt; for(var in c(&quot;onset&quot;, &quot;hospitalization&quot;, &quot;consultation&quot;, &quot;sample_collection&quot;)) {
 +   pacs[[var]] &lt;- sub(&quot;2103(-.*$)&quot;, &quot;2013\\1&quot;, pacs[[var]])
++   pacs[[var]] &lt;- sub(&quot;2105(-.*$)&quot;, &quot;2015\\1&quot;, pacs[[var]])
 +   pacs[[var]] &lt;- as.Date(sub(&quot;2023(-.*$)&quot;, &quot;2013\\1&quot;, pacs[[var]]))
 + }</code></pre>
 </div>

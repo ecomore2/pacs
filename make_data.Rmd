@@ -478,6 +478,7 @@ pacs %>%
 ```{r}
 for(var in c("onset", "hospitalization", "consultation", "sample_collection")) {
   pacs[[var]] <- sub("2103(-.*$)", "2013\\1", pacs[[var]])
+  pacs[[var]] <- sub("2105(-.*$)", "2015\\1", pacs[[var]])
   pacs[[var]] <- as.Date(sub("2023(-.*$)", "2013\\1", pacs[[var]]))
 }
 ```
