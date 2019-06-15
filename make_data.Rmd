@@ -516,8 +516,10 @@ pacs[which(pacs$district == "thoulakhom district"), "province"] <- "Vientiane"
 pacs[which(pacs$district == "phonehong district"), "province"] <- "Vientiane"
 pacs[which(pacs$district == "Bolikhanh"), "province"] <- "Bolikhamxai"
 pacs[which(pacs$district == "Pakkading"), "province"] <- "Bolikhamxai"
+pacs[which(pacs$district == "pakkading district"), "province"] <- "Bolikhamxai"
 pacs[which(pacs$district == "Samakkhixay"), "province"] <- "Attapu"
 pacs[which(pacs$district == "Sukhuma"), "province"] <- "Champasak"
+pacs[which(pacs$district == "soukhoumma district"), "province"] <- "Champasak"
 pacs[which(pacs$district == "Other"), "district"] <- NA
 
 dictionary <- c("Chanthaboury"               = "Chanthabuly",
