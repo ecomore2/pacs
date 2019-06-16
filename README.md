@@ -41,7 +41,7 @@ corrections:
     directly in the pipeline.
 
 The cleaned and reshaped data are saved to the
-[`data\pacs.csv`](https://raw.githubusercontent.com/ecomore2/pacs/master/data/pacs.csv)
+[`data/pacs.csv`](https://raw.githubusercontent.com/ecomore2/pacs/master/data/pacs.csv)
 CSV file that can be copied and paste to a text file on your computer or
 downloaded directly from R into a data
 frame:
