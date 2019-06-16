@@ -361,4 +361,7 @@ age_check
 ```
 
 where `onset2` is calculated from `onset`, `hospitalization`, `consultation` and
-`sample_collection`, and `age2 = onset2 - dob`. 
+`sample_collection`, and `age2 = onset2 - dob`. A CVS file of all the case is
+[here](https://github.com/ecomore2/pacs/blob/master/problems/age_check.csv). Go
+[here](https://raw.githubusercontent.com/ecomore2/pacs/master/problems/age_check.csv)
+if you want to copy and paste this CSV file to your computer.
