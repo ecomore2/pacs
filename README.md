@@ -7,6 +7,13 @@
 
 <!-- badges: end -->
 
+PACS (Pathogen Asset Control System) is the name of the data system used
+at Institut Pasteur du Laos. In the context of the
+[Ecomore2](http://www.ecomore.org) project, PACS is the source of
+epidemiological data. It basically contains one line per sample (here,
+in most of cases, a sample corresponds to a case) with age, gender,
+time, space, confirmation test and serotype information.
+
 Because the PACS system was adopted after the surveillance had already
 started, and because all the data collected prior PACS adoption have not
 been all entered in the PACS system yet, the data are in several files
@@ -20,20 +27,23 @@ in the `raw_data/IPL PACS` folder of the DropBox Ecomore2 folder:
     PACS and retrieved from it;
   - `pacs ID 7464-ID8292_2018-10-02.xlsx` weekly update.
 
-These files will be loaded into the `prepacs` (`pre-PACS.xlsx`) and
-`postpacs` (`PACS.xls` and `pacs ID 7464-ID8292_2018-10-02.xlsx`) data
-frames and binded together in the `pacs` data frame. After merging with
-the GPS data (see [here](https://github.com/ecomore2/gps)), the data are
-patched with corrections:
+In the [cleaning
+pipeline](https://ecomore2.github.io/pacs/make_data.html), these files
+are loaded into the `prepacs` (`pre-PACS.xlsx`) and `postpacs`
+(`PACS.xls` and `pacs ID 7464-ID8292_2018-10-02.xlsx`) data frames and
+binded together in the `pacs` data frame. The data are patched with
+corrections:
 
   - `ages_2018-09-25.xlsx` that contains correction patch on ages;
   - `Villages a retrouver.xlsx` that contains correction patch on
-    villages names.
+    villages names;
+  - plus other dates, provinces and districts names that are patched
+    directly in the pipeline.
 
-The cleaned and reshaped data are saved to the `data\pacs.csv` CSV file
-that can be copy-pasted from
-[here](https://raw.githubusercontent.com/ecomore2/pacs/master/data/pacs.csv)
-or downloaded directly from R into a data
+The cleaned and reshaped data are saved to the
+[`data\pacs.csv`](https://raw.githubusercontent.com/ecomore2/pacs/master/data/pacs.csv)
+CSV file that can be copied and paste to a text file on your computer or
+downloaded directly from R into a data
 frame:
 
 ``` r
@@ -43,8 +53,8 @@ pacs <- readr::read_csv("https://raw.githubusercontent.com/ecomore2/pacs/master/
 ```
 
 The variables names are meaningful in themselves. A case will be
-considered as confirmed if at least one of the `pcr` and `ns1` is
-positive.
+considered as confirmed if at least one of the `pcr` and `ns1` variables
+is positive.
 
 The pipeline used to clean the data is
 [here](https://ecomore2.github.io/pacs/make_data.html). A summary of the
