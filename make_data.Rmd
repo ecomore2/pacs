@@ -476,9 +476,10 @@ pacs %>%
 ## Patching dates
 
 ```{r}
-for(var in c("onset", "hospitalization", "consultation", "sample_collection")) {
+for(var in c("dob", "onset", "hospitalization", "consultation", "sample_collection")) {
   pacs[[var]] <- sub("2103(-.*$)", "2013\\1", pacs[[var]])
   pacs[[var]] <- sub("2105(-.*$)", "2015\\1", pacs[[var]])
+  pacs[[var]] <- sub("2207(-.*$)", "2007\\1", pacs[[var]])
   pacs[[var]] <- as.Date(sub("2023(-.*$)", "2013\\1", pacs[[var]]))
 }
 ```
@@ -553,6 +554,16 @@ dictionary <- c("Chanthaboury"               = "Chanthabuly",
 
 tmp <- setdiff(unique(pacs$district), names(dictionary))
 pacs$district <- c(setNames(tmp, tmp), dictionary)[pacs$district]
+```
+
+Here district name was put in place of province name:
+
+```{r}
+sel <- pacs %>%
+  filter(province == "Nasaiythong") %>%
+  select(id) %>%
+  unlist()
+pacs[which(pacs$id == sel), c("province", "district", "village")] <- c("Vientiane [prefecture]", "Naxaithong", "Boua")
 ```
 
 ## Writing to disk

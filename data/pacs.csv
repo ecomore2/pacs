@@ -842,7 +842,7 @@
 841,"laos","female","46",NA,"Vientiane [prefecture]","Hadxaifong","bor o",NA,NA,2013-05-20,NA,2013-05-23,2013-05-23,"positive",NA,"not_identified"
 842,"laos","female","19",NA,"Vientiane [prefecture]","Sisattanak","donenokkhoum",NA,NA,NA,NA,2013-05-23,2013-05-23,"positive",NA,"dengue_3"
 843,"laos","female","13",2000-05-08,"Vientiane [prefecture]","Xaythany","oudomephon","xaiyabouli",NA,2013-05-20,2013-05-24,2013-05-22,2013-05-23,"positive",NA,"dengue_3"
-844,"laos","male","6",2207-10-10,"Vientiane","phonehong district","52 km","38 km",NA,2013-05-20,2013-05-23,2013-05-23,2013-05-23,"positive",NA,"dengue_3"
+844,"laos","male","6",2007-10-10,"Vientiane","phonehong district","52 km","38 km",NA,2013-05-20,2013-05-23,2013-05-23,2013-05-23,"positive",NA,"dengue_3"
 845,"laos","male","21",1992-01-20,"Vientiane [prefecture]","Xaythany","lardkhuay",NA,NA,2013-05-18,2013-05-20,2013-05-20,2013-05-25,"negative",NA,"not_tested"
 846,"laos","male","44",1969-05-06,"Vientiane [prefecture]","Xaythany","nonekhilek","savannakhet",NA,2013-05-24,2013-05-25,2013-05-25,2013-05-25,"negative",NA,"not_tested"
 847,"laos","female","14",1999-12-19,"Vientiane [prefecture]","Chanthabuly","Phontongchommani",NA,NA,2013-05-19,2013-05-23,2013-05-23,2013-05-23,NA,NA,"not_tested"
@@ -8065,7 +8065,7 @@
 8068,NA,"male","3",NA,"Vientiane [prefecture]","Xaythany","Saphungmuek",NA,NA,2018-08-18,2018-08-23,2018-08-23,NA,"negative","negative",NA
 8069,NA,"female","3",NA,"Vientiane [prefecture]","Xaythany","Saphungmuek",NA,NA,NA,NA,2018-08-24,2018-08-25,"negative","negative",NA
 8070,NA,"male","3",NA,"Vientiane [prefecture]","Chanthabuly","Dongpalab",NA,NA,2018-08-25,2018-08-25,2018-08-24,2018-08-25,"negative","negative",NA
-8071,NA,"male","27",NA,"Nasaiythong","Boua",NA,NA,NA,2018-08-21,2018-08-24,NA,NA,"positive","not_tested",NA
+8071,NA,"male","27",NA,"Vientiane [prefecture]","Naxaithong","Boua",NA,NA,2018-08-21,2018-08-24,NA,NA,"positive","not_tested",NA
 8072,NA,"male","18",NA,"Vientiane [prefecture]","Xaysetha","Phonephanao",NA,NA,2018-08-21,2018-08-25,NA,NA,"positive","not_tested",NA
 8073,NA,"male","23",NA,"Vientiane [prefecture]","Xaysetha","Kharmngoy",NA,NA,2018-08-25,2018-08-27,2018-08-27,2018-08-28,"positive","not_tested",NA
 8074,NA,"female","5",NA,"Vientiane [prefecture]","Xaythany","Thangon",NA,NA,2018-08-24,2018-08-27,2018-08-27,2018-08-26,"equivocal","positive",NA

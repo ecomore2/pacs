@@ -778,9 +778,10 @@ has_village FALSE TRUE
 </div>
 <div id="patching-dates" class="section level2">
 <h2>Patching dates</h2>
-<pre class="r"><code>&gt; for(var in c(&quot;onset&quot;, &quot;hospitalization&quot;, &quot;consultation&quot;, &quot;sample_collection&quot;)) {
+<pre class="r"><code>&gt; for(var in c(&quot;dob&quot;, &quot;onset&quot;, &quot;hospitalization&quot;, &quot;consultation&quot;, &quot;sample_collection&quot;)) {
 +   pacs[[var]] &lt;- sub(&quot;2103(-.*$)&quot;, &quot;2013\\1&quot;, pacs[[var]])
 +   pacs[[var]] &lt;- sub(&quot;2105(-.*$)&quot;, &quot;2015\\1&quot;, pacs[[var]])
++   pacs[[var]] &lt;- sub(&quot;2207(-.*$)&quot;, &quot;2007\\1&quot;, pacs[[var]])
 +   pacs[[var]] &lt;- as.Date(sub(&quot;2023(-.*$)&quot;, &quot;2013\\1&quot;, pacs[[var]]))
 + }</code></pre>
 </div>
@@ -844,6 +845,12 @@ has_village FALSE TRUE
 &gt; 
 &gt; tmp &lt;- setdiff(unique(pacs$district), names(dictionary))
 &gt; pacs$district &lt;- c(setNames(tmp, tmp), dictionary)[pacs$district]</code></pre>
+<p>Here district name was put in place of province name:</p>
+<pre class="r"><code>&gt; sel &lt;- pacs %&gt;%
++   filter(province == &quot;Nasaiythong&quot;) %&gt;%
++   select(id) %&gt;%
++   unlist()
+&gt; pacs[which(pacs$id == sel), c(&quot;province&quot;, &quot;district&quot;, &quot;village&quot;)] &lt;- c(&quot;Vientiane [prefecture]&quot;, &quot;Naxaithong&quot;, &quot;Boua&quot;)</code></pre>
 </div>
 <div id="writing-to-disk" class="section level2">
 <h2>Writing to disk</h2>
