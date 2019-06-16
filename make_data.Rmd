@@ -485,6 +485,8 @@ for(var in c("onset", "hospitalization", "consultation", "sample_collection")) {
 
 ## Fixing provinces and VP's districts names
 
+Fixing the provinces' names:
+
 ```{r}
 dictionary <- c("Attapeu"            = "Attapu",
                 "Champasack"         = "Champasak",
@@ -509,6 +511,8 @@ tmp <- setdiff(unique(pacs$province), names(dictionary))
 pacs$province <- c(setNames(tmp, tmp), dictionary)[pacs$province]
 ```
 
+Fixing some additional provinces names based on the names of the districts:
+
 ```{r}
 pacs[which(pacs$district == "Xaysettha district Attapeu"), "province"] <- "Attapu"
 pacs[which(pacs$district == "vangvieng district"), "province"] <- "Vientiane"
@@ -521,11 +525,15 @@ pacs[which(pacs$district == "Samakkhixay"), "province"] <- "Attapu"
 pacs[which(pacs$district == "Samakkhixay district"), "province"] <- "Attapu"
 pacs[which(pacs$district == "Sukhuma"), "province"] <- "Champasak"
 pacs[which(pacs$district == "soukhoumma district"), "province"] <- "Champasak"
-pacs[which(pacs$district == "Sikhottabong"), "province"] <- "Vientiane [prefecture]"
-pacs[which(pacs$district == "Xaythany"), "province"] <- "Vientiane [prefecture]"
+pacs[which(pacs$district == "Sikhot district"), "province"] <- "Vientiane [prefecture]"
+pacs[which(pacs$district == "Xaythany district"), "province"] <- "Vientiane [prefecture]"
 pacs[which(pacs$district == "khamkerd district"), "province"] <- "Bolikhamxai"
 pacs[which(pacs$district == "Other"), "district"] <- NA
+```
 
+Fixing districts names for Vientiane prefecture:
+
+```{r}
 dictionary <- c("Chanthaboury"               = "Chanthabuly",
                 "Chanthabuly district"       = "Chanthabuly",
                 "Hadsayfong district"        = "Hadxaifong",       

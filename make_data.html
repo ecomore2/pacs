@@ -786,6 +786,7 @@ has_village FALSE TRUE
 </div>
 <div id="fixing-provinces-and-vps-districts-names" class="section level2">
 <h2>Fixing provinces and VP’s districts names</h2>
+<p>Fixing the provinces’ names:</p>
 <pre class="r"><code>&gt; dictionary &lt;- c(&quot;Attapeu&quot;            = &quot;Attapu&quot;,
 +                 &quot;Champasack&quot;         = &quot;Champasak&quot;,
 +                 &quot;Khammouane&quot;         = &quot;Khammouan&quot;,
@@ -807,6 +808,7 @@ has_village FALSE TRUE
 +                 &quot;Xiengkhuang&quot;        = &quot;Xiangkhoang&quot;)
 &gt; tmp &lt;- setdiff(unique(pacs$province), names(dictionary))
 &gt; pacs$province &lt;- c(setNames(tmp, tmp), dictionary)[pacs$province]</code></pre>
+<p>Fixing some additional provinces names based on the names of the districts:</p>
 <pre class="r"><code>&gt; pacs[which(pacs$district == &quot;Xaysettha district Attapeu&quot;), &quot;province&quot;] &lt;- &quot;Attapu&quot;
 &gt; pacs[which(pacs$district == &quot;vangvieng district&quot;), &quot;province&quot;] &lt;- &quot;Vientiane&quot;
 &gt; pacs[which(pacs$district == &quot;thoulakhom district&quot;), &quot;province&quot;] &lt;- &quot;Vientiane&quot;
@@ -818,12 +820,12 @@ has_village FALSE TRUE
 &gt; pacs[which(pacs$district == &quot;Samakkhixay district&quot;), &quot;province&quot;] &lt;- &quot;Attapu&quot;
 &gt; pacs[which(pacs$district == &quot;Sukhuma&quot;), &quot;province&quot;] &lt;- &quot;Champasak&quot;
 &gt; pacs[which(pacs$district == &quot;soukhoumma district&quot;), &quot;province&quot;] &lt;- &quot;Champasak&quot;
-&gt; pacs[which(pacs$district == &quot;Sikhottabong&quot;), &quot;province&quot;] &lt;- &quot;Vientiane [prefecture]&quot;
-&gt; pacs[which(pacs$district == &quot;Xaythany&quot;), &quot;province&quot;] &lt;- &quot;Vientiane [prefecture]&quot;
+&gt; pacs[which(pacs$district == &quot;Sikhot district&quot;), &quot;province&quot;] &lt;- &quot;Vientiane [prefecture]&quot;
+&gt; pacs[which(pacs$district == &quot;Xaythany district&quot;), &quot;province&quot;] &lt;- &quot;Vientiane [prefecture]&quot;
 &gt; pacs[which(pacs$district == &quot;khamkerd district&quot;), &quot;province&quot;] &lt;- &quot;Bolikhamxai&quot;
-&gt; pacs[which(pacs$district == &quot;Other&quot;), &quot;district&quot;] &lt;- NA
-&gt; 
-&gt; dictionary &lt;- c(&quot;Chanthaboury&quot;               = &quot;Chanthabuly&quot;,
+&gt; pacs[which(pacs$district == &quot;Other&quot;), &quot;district&quot;] &lt;- NA</code></pre>
+<p>Fixing districts names for Vientiane prefecture:</p>
+<pre class="r"><code>&gt; dictionary &lt;- c(&quot;Chanthaboury&quot;               = &quot;Chanthabuly&quot;,
 +                 &quot;Chanthabuly district&quot;       = &quot;Chanthabuly&quot;,
 +                 &quot;Hadsayfong district&quot;        = &quot;Hadxaifong&quot;,       
 +                 &quot;Hadxaifong district&quot;        = &quot;Hadxaifong&quot;,
