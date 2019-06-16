@@ -383,7 +383,7 @@ $(document).ready(function () {
 <li><a href="#pcr-and-ns1-tests">PCR and NS1 tests</a></li>
 <li><a href="#serotypes">Serotypes</a></li>
 <li><a href="#geography">Geography</a></li>
-<li><a href="#age">Age</a></li>
+<li><a href="#ages">Ages</a></li>
 </ul>
 </div>
 
@@ -415,7 +415,7 @@ title wherever you want to display the reference list.
 </div>
 <div id="pcr-and-ns1-tests" class="section level2">
 <h2>PCR and NS1 tests</h2>
-<p>The status of the PCR and NS1 tests are as follows:</p>
+<p>Out of the 8288 reported cases, 5256 (63 %) have a conclusive confirmation test, of which 3758 (71 %) are positive:</p>
 <pre><code>              NS1
 PCR            positive equivocal negative not finished not tested   NA  Sum
   positive          267         1      106            2       1784 1445 3605
@@ -445,6 +445,16 @@ PCR            positive equivocal negative not finished not tested   NA  Sum
   not tested          0         0        3            0         14    0   17
   NA                  2         0       15            0          1  529  547
   Sum               395         1     1529            4       2332 3127 7388</code></pre>
+<p>Out of the 6405 cases reported from Vientiane prefecture, 3981 (62 %) have a conclusive confirmation test, of which 2953 (74 %) are positive:</p>
+<pre><code>              NS1
+PCR            positive equivocal negative not finished not tested   NA  Sum
+  positive          203         0       78            2       1285 1278 2846
+  equivocal           1         0        3            0          6    0   10
+  negative          104         0     1028            1        417 1205 2755
+  not finished        0         0        0            0          0    0    0
+  not tested          0         0        3            0          4    0    7
+  NA                  2         0       15            0          0  770  787
+  Sum               310         0     1127            3       1712 3253 6405</code></pre>
 </div>
 <div id="serotypes" class="section level2">
 <h2>Serotypes</h2>
@@ -530,8 +540,8 @@ FALSE  TRUE
 10 Sangthong            21
 11 Bolikhamxay           2</code></pre>
 </div>
-<div id="age" class="section level2">
-<h2>Age</h2>
+<div id="ages" class="section level2">
+<h2>Ages</h2>
 <p>For the reported cases below, the dates of birth are not compatible with the age. It seems that the year of the date of birth has incorrectly been taken as the same as the year of the onset:</p>
 <pre><code># A tibble: 14 x 4
       id dob          age onset2    

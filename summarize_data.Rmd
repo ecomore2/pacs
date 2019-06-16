@@ -193,7 +193,19 @@ g <- function(x)
          c("positive", "equivocal", "negative", "not finished", "not tested", "NA"))
 ```
 
-The status of the PCR and NS1 tests are as follows:
+```{r}
+positives <- pacs %>% 
+  filter(pcr == "positive" | ns1 == "positive") %>% 
+  nrow()
+negatives <- pacs %>% 
+  filter(pcr == "negative", ns1 == "negative") %>% 
+  nrow()
+```
+
+Out of the `r nrow(pacs)` reported cases,
+`r positives + negatives` (`r round(100 * (positives + negatives) / nrow(pacs))` %)
+have a conclusive confirmation test, of which
+`r positives` (`r round(100 * positives / (positives + negatives))` %) are positive:
 
 ```{r}
 pacs %>% 
@@ -226,6 +238,27 @@ and
 ```{r}
 tmp %>%
   filter(! missing_date) %$% 
+  table(PCR, NS1) %>% 
+  addmargins()
+```
+
+```{r}
+tmp %<>% filter(province == "Vientiane [prefecture]")
+positives <- tmp %>% 
+  filter(pcr == "positive" | ns1 == "positive") %>% 
+  nrow()
+negatives <- tmp %>% 
+  filter(pcr == "negative", ns1 == "negative") %>% 
+  nrow()
+```
+
+Out of the `r nrow(tmp)` cases reported from Vientiane prefecture,
+`r positives + negatives` (`r round(100 * (positives + negatives) / nrow(tmp))` %)
+have a conclusive confirmation test, of which
+`r positives` (`r round(100 * positives / (positives + negatives))` %) are positive:
+
+```{r}
+tmp %$% 
   table(PCR, NS1) %>% 
   addmargins()
 ```
@@ -319,7 +352,7 @@ pacs %>%
   arrange(desc(n))
 ```
 
-## Age
+## Ages
 
 ```{r}
 tmp <- pacs %>% 
