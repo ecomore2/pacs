@@ -56,7 +56,6 @@ The variables names are meaningful in themselves. A case will be
 considered as confirmed if at least one of the `pcr` and `ns1` variables
 is positive.
 
-The pipeline used to clean the data is
-[here](https://ecomore2.github.io/pacs/make_data.html). A summary of the
-current state of the data set is
-[here](https://ecomore2.github.io/pacs/summarize_data.html).
+This [summary](https://ecomore2.github.io/pacs/summarize_data.html)
+provides a real-time overview of the current state of the PACS data set,
+highlighting problems that remain to be fixed.
