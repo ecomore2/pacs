@@ -521,6 +521,9 @@ pacs[which(pacs$district == "Samakkhixay"), "province"] <- "Attapu"
 pacs[which(pacs$district == "Samakkhixay district"), "province"] <- "Attapu"
 pacs[which(pacs$district == "Sukhuma"), "province"] <- "Champasak"
 pacs[which(pacs$district == "soukhoumma district"), "province"] <- "Champasak"
+pacs[which(pacs$district == "Sikhottabong"), "province"] <- "Vientiane [prefecture]"
+pacs[which(pacs$district == "Xaythany"), "province"] <- "Vientiane [prefecture]"
+pacs[which(pacs$district == "khamkerd district"), "province"] <- "Bolikhamxai"
 pacs[which(pacs$district == "Other"), "district"] <- NA
 
 dictionary <- c("Chanthaboury"               = "Chanthabuly",
