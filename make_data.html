@@ -782,8 +782,10 @@ has_village FALSE TRUE
 +   pacs[[var]] &lt;- sub(&quot;2103(-.*$)&quot;, &quot;2013\\1&quot;, pacs[[var]])
 +   pacs[[var]] &lt;- sub(&quot;2105(-.*$)&quot;, &quot;2015\\1&quot;, pacs[[var]])
 +   pacs[[var]] &lt;- sub(&quot;2207(-.*$)&quot;, &quot;2007\\1&quot;, pacs[[var]])
++   pacs[[var]] &lt;- sub(&quot;1008(-.*$)&quot;, &quot;2008\\1&quot;, pacs[[var]])
 +   pacs[[var]] &lt;- as.Date(sub(&quot;2023(-.*$)&quot;, &quot;2013\\1&quot;, pacs[[var]]))
 + }</code></pre>
+<pre class="r"><code>&gt; pacs[which(pacs$dob == &quot;1900-01-01&quot;), &quot;dob&quot;] &lt;- NA</code></pre>
 </div>
 <div id="fixing-provinces-and-vps-districts-names" class="section level2">
 <h2>Fixing provinces and VP’s districts names</h2>

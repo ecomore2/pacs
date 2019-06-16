@@ -480,8 +480,13 @@ for(var in c("dob", "onset", "hospitalization", "consultation", "sample_collecti
   pacs[[var]] <- sub("2103(-.*$)", "2013\\1", pacs[[var]])
   pacs[[var]] <- sub("2105(-.*$)", "2015\\1", pacs[[var]])
   pacs[[var]] <- sub("2207(-.*$)", "2007\\1", pacs[[var]])
+  pacs[[var]] <- sub("1008(-.*$)", "2008\\1", pacs[[var]])
   pacs[[var]] <- as.Date(sub("2023(-.*$)", "2013\\1", pacs[[var]]))
 }
+```
+
+```{r}
+pacs[which(pacs$dob == "1900-01-01"), "dob"] <- NA
 ```
 
 ## Fixing provinces and VP's districts names

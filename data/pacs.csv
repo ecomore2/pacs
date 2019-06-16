@@ -205,7 +205,7 @@
 204,"laos","female","40",NA,"Vientiane [prefecture]","Xaythany","khamhoung",NA,NA,2012-08-19,NA,2012-08-21,2012-08-21,"negative",NA,"not_tested"
 205,"laos","female","3",2009-07-06,"Vientiane [prefecture]","Xaythany","dongkhuay",NA,NA,2012-08-17,2012-08-20,2012-08-20,2012-08-23,"negative",NA,"not_tested"
 206,"laos","male","11",NA,"Vientiane [prefecture]","Xaysetha","donenoun",NA,NA,2012-08-13,2012-08-21,2012-08-21,2012-08-21,"positive",NA,"not_identified"
-207,"laos","female","13",1008-10-11,"Vientiane [prefecture]","Xaysetha","chommany",NA,NA,2012-08-17,2012-08-21,2012-08-21,2012-08-21,"positive",NA,"not_identified"
+207,"laos","female","13",2008-10-11,"Vientiane [prefecture]","Xaysetha","chommany",NA,NA,2012-08-17,2012-08-21,2012-08-21,2012-08-21,"positive",NA,"not_identified"
 208,"laos","female","12",2000-02-26,"Vientiane [prefecture]","Xaysetha","chommanytai",NA,NA,2012-08-19,2012-08-23,2012-08-23,2012-08-23,"positive",NA,"not_identified"
 209,"laos","female","7",2005-11-19,"Vientiane [prefecture]","Xaysetha","sengsavang",NA,NA,2012-08-19,2012-08-21,2012-08-21,2012-08-21,"negative",NA,"not_tested"
 210,"foreigner","male","30",NA,"Vientiane [prefecture]",NA,NA,NA,NA,NA,NA,2012-08-23,2012-08-23,"positive",NA,"dengue_1"
@@ -6843,7 +6843,7 @@
 6845,NA,"female","12",2005-05-07,"Attapu","Samakkhixay district","Saysaard",NA,"Vietnam",2017-08-18,NA,NA,2017-09-25,"negative","negative",NA
 6846,NA,"female","12",2005-05-07,"Attapu","Samakkhixay district","Saysaard",NA,"Vietnam",2017-09-18,NA,NA,2017-09-25,"negative","not_tested",NA
 6847,NA,"male","11",NA,"Saravan","Saravanh district","Kokmai",NA,NA,NA,NA,NA,2017-09-19,"negative","not_tested",NA
-6848,NA,"female","5.4",1900-01-01,"Saravan","Vapy","Nongngong",NA,NA,NA,NA,2017-09-21,2017-09-21,"negative","not_tested",NA
+6848,NA,"female","5.4",NA,"Saravan","Vapy","Nongngong",NA,NA,NA,NA,2017-09-21,2017-09-21,"negative","not_tested",NA
 6849,NA,"female","16",NA,"Vientiane [prefecture]","Chanthabuly","Sisavat",NA,NA,2017-09-24,2017-09-24,2017-09-24,2017-09-25,"positive","not_tested",NA
 6850,NA,"male","25",NA,"Vientiane [prefecture]","Xaysetha","Samkay",NA,NA,2017-09-23,2017-09-24,NA,2017-09-25,"positive","not_tested",NA
 6851,NA,"male","23",NA,"Vientiane [prefecture]","Xaysetha","Dongsavath",NA,NA,NA,NA,NA,2017-09-21,"positive","not_tested",NA
