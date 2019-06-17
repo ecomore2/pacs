@@ -139,7 +139,7 @@ as explained [here](https://ecomore2.github.io/pacs/explore_data.html), the
 time series of the number of suspected cases per week looks like:
 
 ```{r time_series, fig.width = 8}
-corrections <- dates_diff <- pacs %>% 
+corrections <- pacs %>% 
   mutate(onset_hospitalization             = as.integer(onset           - hospitalization),
          onset_consultation                = as.integer(onset           - consultation),
          onset_sample_collection           = as.integer(onset           - sample_collection),
@@ -351,6 +351,56 @@ pacs %>%
   ungroup() %>% 
   arrange(desc(n))
 ```
+
+There is village information for `r sum(!is.na(pacs$village))` cases
+(`r round(100 * sum(!is.na(pacs$village)) / nrow(pacs))` % of the total number
+of cases). In Vientiane prefecture, the split of cases depending on available
+information on village, test and time is
+
+```{r}
+(tmp <- pacs %>% filter(province == "Vientiane [prefecture]") %>% 
+  mutate(onset2 = if_else(is.na(onset),
+                          if_else(is.na(hospitalization),
+                                  if_else(is.na(consultation),
+                                          sample_collection + corrections["onset_sample_collection"],
+                                          consultation + corrections["onset_consultation"]),
+                                  hospitalization + corrections["onset_hospitalization"]),
+                          onset),
+         village_info = ! is.na(village),
+         test_info = pcr == "positive" | ns1 == "positive" | (pcr == "negative" & ns1 == "negtive"),
+         test_info = ifelse(is.na(test_info), FALSE, test_info),
+         time_info = ! is.na(onset2)) %>%
+  group_by(village_info, test_info, time_info) %>% 
+  tally() %>% 
+  ungroup())
+```
+
+which means that there are `r select(filter(tmp, village_info, test_info, time_info), n)`
+(`r round(100 * select(filter(tmp, village_info, test_info, time_info), n) / sum(tmp$n))` %)
+cases in Vientiane prefecture for which we have village, time and confirmation test
+information. If we consider all cases (tested or not), the split then becomes:
+
+```{r}
+pacs %>% filter(province == "Vientiane [prefecture]") %>% 
+  mutate(onset2 = if_else(is.na(onset),
+                          if_else(is.na(hospitalization),
+                                  if_else(is.na(consultation),
+                                          sample_collection + corrections["onset_sample_collection"],
+                                          consultation + corrections["onset_consultation"]),
+                                  hospitalization + corrections["onset_hospitalization"]),
+                          onset),
+         village_info = ! is.na(village),
+         test_info = pcr == "positive" | ns1 == "positive" | (pcr == "negative" & ns1 == "negtive"),
+         test_info = ifelse(is.na(test_info), FALSE, test_info),
+         time_info = ! is.na(onset2)) %>%
+  group_by(village_info, time_info) %>% 
+  tally() %>% 
+  ungroup()
+```
+
+There are `r sum(select(filter(tmp, village_info, time_info), n))` cases
+(`r round(100 * sum(select(filter(tmp, village_info, time_info), n)) / sum(tmp$n))` %)
+for which we have both time and village information.
 
 ## Ages
 
