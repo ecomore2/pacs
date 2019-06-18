@@ -34,7 +34,7 @@ title wherever you want to display the reference list.
 }
 </style>
 
-```{r general_options, include = FALSE}
+```{r general options, include = FALSE}
 knitr::knit_hooks$set(
   margin = function(before, options, envir) {
     if (before) par(mgp = c(1.5, .5, 0), bty = "n", plt = c(.105, .97, .13, .97))
@@ -52,70 +52,56 @@ knitr::opts_chunk$set(margin = TRUE, prompt = TRUE, comment = "", echo = FALSE,
 options(width = 137)
 ```
 
-```{r eval = FALSE}
-if (! "readr" %in% rownames(installed.packages())) install.packages("readr")
-pacs <- readr::read_csv("https://raw.githubusercontent.com/ecomore2/pacs/master/data/pacs.csv",
-                        col_types = paste(c("icfnD", rep("c", 5), rep("D", 4), rep("f", 3)), collapse = ""))
-```
-
-```{r include = FALSE}
+```{r data, include = FALSE}
 pacs <- readr::read_csv("data/pacs.csv",
                         col_types = paste(c("icfnD", rep("c", 5), rep("D", 4), rep("f", 3)), collapse = ""))
 ```
 
-```{r message = FALSE}
-library(magrittr)
+```{r packages, message = FALSE}
 library(dplyr)
+library(ecomore)
 library(lubridate)
+library(magrittr)
 library(padr)
-library(sfsmisc)
+library(sf)
 ```
 
-```{r}
+```{r problems directory}
 if (!dir.exists("problems")) dir.create("problems")
 ```
 
 The CSV file of the **PACS data set** is
-[here](https://github.com/ecomore2/pacs/blob/master/data/pacs.csv). Go [here](https://raw.githubusercontent.com/ecomore2/pacs/master/data/pacs.csv)
-if you want to copy and paste this CSV file to your computer.
+[here](https://github.com/ecomore2/pacs/blob/master/data/pacs.csv). Go
+[here](https://raw.githubusercontent.com/ecomore2/pacs/master/data/pacs.csv)
+if you want to copy and paste this CSV file to your computer. It looks like
+
+```{r the data}
+pacs
+```
 
 ## Dates of reported cases
 
-```{r time_range_of_pacs}
-mindate <- pacs %>%
-  select(onset, hospitalization, consultation, sample_collection) %>% 
-  lapply(min, na.rm = TRUE) %>% 
-  purrr::reduce(c) %>% 
-  min()
-
-maxdate <- pacs %>%
-  select(onset, hospitalization, consultation, sample_collection) %>% 
-  lapply(max, na.rm = TRUE) %>% 
-  purrr::reduce(c) %>% 
-  max()
+```{r time range of pacs}
+minmaxdates <- function(f) {
+  pacs %>%
+    select(onset, hospitalization, consultation, sample_collection) %>% 
+    lapply(f, na.rm = TRUE) %>% 
+    purrr::reduce(c) %>% 
+    f()
+}  
 ```
 
-```{r problems_in_dates}
+```{r problems in dates}
 threshold <- 15
 problems <- pacs %>% 
-  mutate(onset_hospitalization             = as.integer(onset           - hospitalization),
-         onset_consultation                = as.integer(onset           - consultation),
-         onset_sample_collection           = as.integer(onset           - sample_collection),
-         hospitalization_consultation      = as.integer(hospitalization - consultation),
-         hospitalization_sample_collection = as.integer(hospitalization - sample_collection),
-         consultation_sample_collection    = as.integer(consultation    - sample_collection)) %>% 
-  filter(abs(onset_hospitalization)             > threshold |
-         abs(onset_consultation)                > threshold |
-         abs(onset_sample_collection)           > threshold |
-         abs(hospitalization_consultation)      > threshold |
-         abs(hospitalization_sample_collection) > threshold |
-         abs(consultation_sample_collection)    > threshold) %>% 
+  add_dates_differences() %>% 
+  filter_at_any("diff_", function(x) abs(x) > threshold, starts_with) %>% 
   select(id, onset, hospitalization, consultation, sample_collection)
 
 write.csv(problems, "problems/dates.csv", FALSE, row.names = FALSE)
 ```
 
-```{r number_of_cases_with_no_dates}
+```{r number of cases with no dates}
 no_dates <- pacs %>%
   filter(is.na(onset), is.na(hospitalization), is.na(consultation), is.na(sample_collection)) %>% 
   select(id, onset, hospitalization, consultation, sample_collection)
@@ -123,47 +109,25 @@ write.csv(no_dates, "problems/no_dates.csv", FALSE, row.names = FALSE)
 ```
 
 As of `r as.Date(Sys.time())`, the PACS data set contains **`r nrow(pacs)` cases**
-reported from **`r mindate`** to **`r maxdate`**. There are `r nrow(problems)` cases for
-which there are more than `r threshold` days between at least one pair of dates
-among onset, consultation, hospitalization and sample collection. A CSV file of
-these cases is [here](https://github.com/ecomore2/pacs/blob/master/problems/dates.csv).
-Go [here](https://raw.githubusercontent.com/ecomore2/pacs/master/problems/dates.csv)
+reported from **`r minmaxdates(min)`** to **`r minmaxdates(max)`**. There are
+`r nrow(problems)` cases for which there are more than `r threshold` days between
+at least one pair of dates among `onset`, `hospitalization`, `consultation` and
+`sample_collection`. A CSV file of these cases is
+[here](https://github.com/ecomore2/pacs/blob/master/problems/dates.csv). Go
+[here](https://raw.githubusercontent.com/ecomore2/pacs/master/problems/dates.csv)
 if you want to copy and paste this CSV file to your computer. Furthermore, there
 are `r nrow(no_dates)` cases with no date at all. A CSV file of these cases is
-[here](https://github.com/ecomore2/pacs/blob/master/problems/no_dates.csv).
-Go [here](https://raw.githubusercontent.com/ecomore2/pacs/master/problems/no_dates.csv)
+[here](https://github.com/ecomore2/pacs/blob/master/problems/no_dates.csv). Go
+[here](https://raw.githubusercontent.com/ecomore2/pacs/master/problems/no_dates.csv)
 if you want to copy and paste this CSV file to your computer. After removing these
 **`r nrow(problems)` cases with date problems** as well as the **`r nrow(no_dates)`
-cases with no dates at all** and inferring the missing onset dates from other dates
-as explained [here](https://ecomore2.github.io/pacs/explore_data.html), the
+cases with no dates at all** and inferring the missing onset dates from
+`hospitalization`, `consultation` or `sample_collection`, the
 time series of the number of suspected cases per week looks like:
 
-```{r time_series, fig.width = 8}
-corrections <- pacs %>% 
-  mutate(onset_hospitalization             = as.integer(onset           - hospitalization),
-         onset_consultation                = as.integer(onset           - consultation),
-         onset_sample_collection           = as.integer(onset           - sample_collection),
-         hospitalization_consultation      = as.integer(hospitalization - consultation),
-         hospitalization_sample_collection = as.integer(hospitalization - sample_collection),
-         consultation_sample_collection    = as.integer(consultation    - sample_collection)) %>% 
-  filter(abs(onset_hospitalization)             < threshold,
-         abs(onset_consultation)                < threshold,
-         abs(onset_sample_collection)           < threshold,
-         abs(hospitalization_consultation)      < threshold,
-         abs(hospitalization_sample_collection) < threshold,
-         abs(consultation_sample_collection)    < threshold) %>% 
-  select(contains("onset_")) %>% 
-  sapply(mean) %>% 
-  round()
-
+```{r makes weekly incidences}
 byweek <- pacs %>% 
-  mutate(onset2 = if_else(is.na(onset),
-                          if_else(is.na(hospitalization),
-                                  if_else(is.na(consultation),
-                                          sample_collection + corrections["onset_sample_collection"],
-                                          consultation + corrections["onset_consultation"]),
-                                  hospitalization + corrections["onset_hospitalization"]),
-                          onset)) %>% 
+  mutate(onset2 = correct_onset(.)) %>% 
   select(-dob, -onset, -hospitalization, -consultation, -sample_collection) %>% 
   filter(! is.na(onset2)) %>% 
   thicken("week") %>% 
@@ -172,45 +136,81 @@ byweek <- pacs %>%
   tally() %>% 
   ungroup() %>% 
   pad("week")
+```
 
+```{r plotting weekly incidences, fig.width = 8}
 lab <- min(year(byweek$onset2_week)):(max(year(byweek$onset2_week)) + 1)
 ats <- as.Date(paste0(lab, "-01-01"))
 
-with(byweek, plot(onset2_week, n, type = "h", col = "blue", xlab = NA,
-                  ylab = "number of suspected cases", axes = FALSE, xlim = range(ats)))
+with(byweek, plot(onset2_week, n, type = "n", axes = FALSE, xlim = range(ats),
+                  xlab = NA, ylab = "number of suspected cases"))
 
 axis(1, ats, lab); axis(2)
 abline(v = ats, col = "grey")
 abline(h = seq(25, 150, 25), col = "grey")
+
+with(byweek, points(onset2_week, n, type = "h", col = "blue"))
 ```
 
-## PCR and NS1 tests
+## Confirmation tests
 
-```{r}
-f <- function(x) ifelse(is.na(x), "NA", x)
-g <- function(x)
+Here the presence of a confirmation test is based on the information in the
+variables `pcr`, `ns1` and `serotype`. Indeed, some cases without any information
+in `pcr` or `ns1` may still have an identified serotype. For example:
+
+```{r link between PCR and NS1 on one hand and serotype on the other hand}
+pacs %>% 
+  filter(is.na(pcr) | pcr != "positive",
+         is.na(ns1) | ns1 != "positive",
+         grepl("dengue", serotype)) %>% 
+  select(id, pcr, ns1, serotype)
+```
+
+```{r adding test information}
+pacs %<>% add_tests()
+```
+
+The split of data according to the availability of time information and
+confirmation test is:
+
+```{r table time and test}
+pacs %>% 
+  mutate(onset2 = correct_onset(.),
+         time_info = ! is.na(onset2)) %$%
+  table(tested, time_info) %>% 
+  addmargins()
+```
+
+Among the cases for which a confirmation test is available, the split of data
+according to positivity and time information is:
+
+```{r table time and positivity}
+pacs %>% 
+  mutate(onset2 = correct_onset(.),
+         time_info = ! is.na(onset2)) %>%
+  filter(tested) %$% 
+  table(confirmed, time_info) %>% 
+  addmargins()
+```
+
+Out of the `r nrow(pacs)` reported cases,
+`r sum(pacs$tested, na.rm = TRUE)` (`r round(100 * sum(pacs$tested, na.rm = TRUE) / nrow(pacs))` %)
+have a conclusive confirmation test, of which
+`r sum(pacs$confirmed, na.rm = TRUE)`
+(`r round(100 * sum(pacs$confirmed, na.rm = TRUE) / sum(pacs$tested, na.rm = TRUE))`
+%) are positive:
+
+```{r utilitary functions}
+recode_na <- function(x) ifelse(is.na(x), "NA", x)
+refactor <- function(x)
   factor(sub("_", " ", x),
          c("positive", "equivocal", "negative", "not finished", "not tested", "NA"))
 ```
 
-```{r}
-positives <- pacs %>% 
-  filter(pcr == "positive" | ns1 == "positive") %>% 
-  nrow()
-negatives <- pacs %>% 
-  filter(pcr == "negative", ns1 == "negative") %>% 
-  nrow()
-```
-
-Out of the `r nrow(pacs)` reported cases,
-`r positives + negatives` (`r round(100 * (positives + negatives) / nrow(pacs))` %)
-have a conclusive confirmation test, of which
-`r positives` (`r round(100 * positives / (positives + negatives))` %) are positive:
-
-```{r}
+```{r table PCR and NS1 all}
 pacs %>% 
-  mutate(PCR = g(f(as.character(pcr))),
-         NS1 = g(f(as.character(ns1)))) %$%
+  mutate(PCR = refactor(recode_na(as.character(pcr))),
+         NS1 = refactor(recode_na(as.character(ns1)))) %$%
   table(PCR, NS1) %>% 
   addmargins()
 ```
@@ -219,14 +219,14 @@ Stratifying by the reported cases with or without problem in missing dates (i.e.
 the `r nrow(problems)` cases with date problems as well as the `r nrow(no_dates)`
 cases with no dates at all), it gives:
 
-```{r}
+```{r preparing data}
 tmp <- pacs %>% 
-  mutate(PCR = g(f(as.character(pcr))),
-         NS1 = g(f(as.character(ns1))),
+  mutate(PCR = refactor(recode_na(as.character(pcr))),
+         NS1 = refactor(recode_na(as.character(ns1))),
          missing_date = id %in% c(problems$id, no_dates$id))
 ```
 
-```{r}
+```{r table PCR and NS1 missing date}
 tmp %>%
   dplyr::filter(missing_date) %$% 
   table(PCR, NS1) %>% 
@@ -235,117 +235,109 @@ tmp %>%
 
 and 
 
-```{r}
+```{r table PCR and NS1 non missing date}
 tmp %>%
   filter(! missing_date) %$% 
   table(PCR, NS1) %>% 
   addmargins()
 ```
 
-```{r}
-tmp %<>% filter(province == "Vientiane [prefecture]")
-positives <- tmp %>% 
-  filter(pcr == "positive" | ns1 == "positive") %>% 
-  nrow()
-negatives <- tmp %>% 
-  filter(pcr == "negative", ns1 == "negative") %>% 
-  nrow()
-```
-
-Out of the `r nrow(tmp)` cases reported from Vientiane prefecture,
-`r positives + negatives` (`r round(100 * (positives + negatives) / nrow(tmp))` %)
-have a conclusive confirmation test, of which
-`r positives` (`r round(100 * positives / (positives + negatives))` %) are positive:
-
-```{r}
-tmp %$% 
-  table(PCR, NS1) %>% 
-  addmargins()
-```
-
-## Serotypes
-
 The status of the serotypes tests is as follow:
 
-```{r}
+```{r serotypes}
 pacs %>% 
-  mutate(serotype = factor(f(as.character(serotype)),
-                           c("dengue_1", "dengue_2", "dengue_3", "dengue_4", "not_identified", "not_finished", "not_tested", "NA"))) %$% 
-  table(serotype) %>%
-  (function(x) lapply(c(names, as.vector), function(f) f(x))) %>%
-  data.frame() %>%
-  setNames(c("status", "n"))
+  mutate(serotype = factor(recode_na(as.character(serotype)),
+                           c("dengue_1", "dengue_2", "dengue_3", "dengue_4",
+                             "not_identified", "not_finished", "not_tested", "NA"))) %>%
+  group_by(serotype) %>% 
+  tally() %>% 
+  ungroup()
 ```
 
 ## Geography
 
 The number of missing values for province, district and village:
 
-```{r}
+```{r table presence absence province district village}
 pacs %>% 
-  transmute(province = is.na(province),
-            district = is.na(district),
-            village  = is.na(village)) %>% 
+  transmute(province = ! is.na(province),
+            district = ! is.na(district),
+            village  = ! is.na(village)) %>% 
   lapply(table)
+```
+
+where `TRUE` means available informaiton and `FALSE` means missing information.
+The combinations of missing values for these 3 variables are:
+
+```{r cross table province district village info}
+pacs %>% 
+  transmute(province = ! is.na(province),
+            district = ! is.na(district),
+            village  = ! is.na(village)) %>% 
+  group_by(province, district, village) %>% 
+  tally() %>% 
+  ungroup()
 ```
 
 The reported cases with village information but missing province information:
 
-```{r}
+```{r village info but missing province info}
 pacs %>%
   filter(is.na(province), ! is.na(village)) %>% 
   select(id, province, district, village)
 ```
 
-The reported cases with district information but missing province information:
+The reported cases with village information but missing district information:
 
-```{r}
-pacs %>%
-  filter(is.na(province), ! is.na(district)) %>% 
-  select(id, province, district, village)
+```{r village info but missing district info}
+(tmp <- pacs %>%
+  filter(is.na(district), ! is.na(village)) %>% 
+  select(id, province, district, village))
+write.csv(tmp, "problems/village_but_no_district.csv", FALSE, row.names = FALSE)
 ```
 
-```{r}
-for(f in c("gadm36_LAO_0_sf.rds", "gadm36_LAO_1_sf.rds", "gadm36_LAO_2_sf.rds"))
-  if(! file.exists(f))
-    download.file(paste0("https://biogeo.ucdavis.edu/data/gadm3.6/Rsf/", f), f)
+A CVS file of all the case is
+[here](https://github.com/ecomore2/pacs/blob/master/problems/village_but_no_district.csv). Go
+[here](https://raw.githubusercontent.com/ecomore2/pacs/master/problems/village_but_no_district.csv)
+if you want to copy and paste this CSV file to your computer.
+
+**WE SHOULD BE ABLE TO FIND THIS DISTRICTS BASED ON VILLAGE (AND PROVINCE) INFORMATION**
+
+```{r the province map}
+f <- "gadm36_LAO_1_sf.rds"
+if(! file.exists(f))
+  download.file(paste0("https://biogeo.ucdavis.edu/data/gadm3.6/Rsf/", f), f)
+lao1 <- readRDS(f)
 ```
 
 The provinces names that are not official Lao province name:
 
-```{r message = FALSE}
-library(sf)
-lao1 <- readRDS("gadm36_LAO_1_sf.rds")
-lao2 <- readRDS("gadm36_LAO_2_sf.rds")
+```{r provinces names that are not lao provinces, message = FALSE}
 setdiff(unique(pacs$province), lao1$NAME_1)
 ```
 
-```{r}
+```{r filtering for Vientiane prefecture}
 vt <- pacs %>% 
-  filter(! is.na(province)) %>% 
-  mutate(vientiane = province == "Vientiane [prefecture]") %$%
-  mean(vientiane)
+  filter(province == "Vientiane [prefecture]")
 ```
 
-`r round(100 * vt)` % of reported cases
-(`r sum(pacs$province == "Vientiane [prefecture]", na.rm = TRUE)`) are from
-Vientiane prefecture:
+`r round(100 * nrow(vt) / nrow(filter(pacs, ! is.na(province))))` % of reported
+cases (`r nrow(vt)`) are from Vientiane prefecture:
 
-```{r}
+```{r province distribution}
 pacs %>% 
   group_by(province) %>% 
   tally() %>% 
   ungroup() %>% 
   arrange(desc(n)) %>% 
-  print(n = 25)
+  print(n = 22)
 ```
 
 The distribution of cases among the different districts of Vientiane prefecture
 looks like:
 
-```{r}
-pacs %>% 
-  filter(province == "Vientiane [prefecture]") %>% 
+```{r district distribution}
+vt %>% 
   group_by(district) %>% 
   tally() %>% 
   ungroup() %>% 
@@ -357,19 +349,12 @@ There is village information for `r sum(!is.na(pacs$village))` cases
 of cases). In Vientiane prefecture, the split of cases depending on available
 information on village, test and time is
 
-```{r}
-(tmp <- pacs %>% filter(province == "Vientiane [prefecture]") %>% 
-  mutate(onset2 = if_else(is.na(onset),
-                          if_else(is.na(hospitalization),
-                                  if_else(is.na(consultation),
-                                          sample_collection + corrections["onset_sample_collection"],
-                                          consultation + corrections["onset_consultation"]),
-                                  hospitalization + corrections["onset_hospitalization"]),
-                          onset),
-         village_info = ! is.na(village),
-         test_info = pcr == "positive" | ns1 == "positive" | (pcr == "negative" & ns1 == "negtive"),
-         test_info = ifelse(is.na(test_info), FALSE, test_info),
-         time_info = ! is.na(onset2)) %>%
+```{r split village test time}
+(tmp <- vt %>% 
+  add_tests() %>% 
+  rename(test_info = tested) %>% 
+  mutate(time_info = ! is.na(correct_onset(.)),
+         village_info = ! is.na(village)) %>%
   group_by(village_info, test_info, time_info) %>% 
   tally() %>% 
   ungroup())
@@ -380,22 +365,12 @@ which means that there are `r select(filter(tmp, village_info, test_info, time_i
 cases in Vientiane prefecture for which we have village, time and confirmation test
 information. If we consider all cases (tested or not), the split then becomes:
 
-```{r}
-pacs %>% filter(province == "Vientiane [prefecture]") %>% 
-  mutate(onset2 = if_else(is.na(onset),
-                          if_else(is.na(hospitalization),
-                                  if_else(is.na(consultation),
-                                          sample_collection + corrections["onset_sample_collection"],
-                                          consultation + corrections["onset_consultation"]),
-                                  hospitalization + corrections["onset_hospitalization"]),
-                          onset),
-         village_info = ! is.na(village),
-         test_info = pcr == "positive" | ns1 == "positive" | (pcr == "negative" & ns1 == "negtive"),
-         test_info = ifelse(is.na(test_info), FALSE, test_info),
-         time_info = ! is.na(onset2)) %>%
-  group_by(village_info, time_info) %>% 
-  tally() %>% 
-  ungroup()
+```{r table village time}
+vt %>% 
+  mutate(time_info = ! is.na(correct_onset(.)),
+         village_info = ! is.na(village)) %$%
+  table(village_info, time_info) %>% 
+  addmargins()
 ```
 
 There are `r sum(select(filter(tmp, village_info, time_info), n))` cases
@@ -404,15 +379,9 @@ for which we have both time and village information.
 
 ## Ages
 
-```{r}
+```{r making age2}
 tmp <- pacs %>% 
-  mutate(onset2 = if_else(is.na(onset),
-                          if_else(is.na(hospitalization),
-                                  if_else(is.na(consultation),
-                                          sample_collection + corrections["onset_sample_collection"],
-                                          consultation + corrections["onset_consultation"]),
-                                  hospitalization + corrections["onset_hospitalization"]),
-                          onset),
+  mutate(onset2 = correct_onset(.),
          age2 = as.numeric((onset2 - dob) / 365))
 ```
 
@@ -420,13 +389,13 @@ For the reported cases below, the dates of birth are not compatible with the age
 It seems that the year of the date of birth has incorrectly been taken as the
 same as the year of the onset:
 
-```{r}
+```{r wrong ages}
 tmp %>%
   filter(age2 < 0) %>% 
   select(id, dob, age, onset2)
 ```
 
-```{r}
+```{r looking for suspicious age}
 mod <- lm(age2 ~ age, tmp)
 cft <- coef(mod)
 threshold <- 2
@@ -439,7 +408,7 @@ write.csv(age_check, "problems/age_check.csv", FALSE, row.names = FALSE)
 There are `r nrow(age_check)` cases for which the reported age, onset, and date
 of birth are not quite compatible:
 
-```{r}
+```{r showing suspicious ages}
 age_check
 ```
 
